@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/js/common/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+    <div>
+        <p>
+            <input type="text" name="user_name" id="user_name" >
+        </p>
+        <p>
+            <input type="password" name="password" id="password">
+        </p>
+        <p>
+            <input type="button" name="login_btn" id="login_btn" value="登录">
+        </p>
+        <p>
+            <input type="button" name="on" id="on" value="on">
+        </p>
+        <p>
+            <input type="button" name="off" id="off" value="off">
+        </p>
+        <p>
+            <input type="text" id="user_id" name="user_id" value="1">
+        </p>
+
+
+    <script>
+        $('#login_btn').on('click', function () {
+            $.ajax({
+                type:'post',
+                url:"http://localhost:8003/userinfo/admin/login/",
+                data:{
+                    "user_name":$('#user_name').val(),
+                    "password":$('#password').val(),
+                },
+                dataType:'json',
+                success:function (response) {
+                    if(response.data){
+                        console.log("aaa");
+                        // 登录成功发送websocket
+                        var socket = new WebSocket("ws:" + window.location.host + "/userinfo/" + "build_socket/" + $('#user_id').val());
+                        socket.onopen = function () {
+
+                            console.log('WebSocket open');//成功连接上Websocket
+                        };
+                        socket.onmessage = function (e) {
+                            console.log('message: ' + e.data);//打印服务端返回的数据
+                        };
+
+                    }
+                    else{
+                        console.log("false");
+                    }
+                },
+                error: function (response) {
+
+                },
+            })
+        })
+
+        $('#on').on('click', function (){
+             $.ajax({
+                 type: 'get',
+                    url: 'http://localhost:8003/userinfo/admin/login/',
+                    data:{
+                        "username":$('#on').val(),
+                    },
+                    dataType:'json',
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (response) {
+
+                    },
+             })
+        })
+
+
+
+    </script>
+</body>
+</html>

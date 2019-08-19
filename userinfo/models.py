@@ -39,3 +39,14 @@ class Guest(models.Model):
 
     def __str__(self):
         return self
+
+class UserDetail(models.Model):
+    user = models.OneToOneField(UserInfo, verbose_name="用户")
+    realname = models.CharField(verbose_name="用户名", max_length=30, null=False)
+    face_picture = models.ImageField(verbose_name='面部照片', upload_to='image/guest/face', default='normal.png')
+    staff_code = models.CharField(verbose_name="员工编号", max_length=30, null=False)
+    position = models.CharField(verbose_name="职位", max_length=30, null=False)
+    department = models.CharField(verbose_name="所属部门", max_length=30, null=False)
+
+    def __str__(self):
+        return self

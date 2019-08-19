@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^hmmqtt/', include('hmmqtt.urls')),
     url(r'^onlinemac/', include('machine.urls')),
     url(r'^index', TemplateView.as_view(template_name="index.html"), name='index'),
+    url(r'drugcon/$', TemplateView.as_view(template_name='drugcon.html'), name='drugcon'),
 
 ]
