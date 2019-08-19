@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+       <script src="../static/js/common/jquery-1.9.1.min.js"></script>
+   </head>
+   <body>
+   <button onclick="openlamp(1)">on</button>
+   <button onclick="openlamp(0)">off</button>
+   <script>
+       function openlamp(a){
+           console.log('a');
+            $.ajax({
+            url:'http://localhost:8000/onlinemac/lamp/',
+            type:'get',
+            dataType:'json',
+            data:{
+                al:a,
+
+            },
+            success:function (res) {
+                console.log(res);
+            },
+            error:function () {
+
+            }
+        })
+       }
+
+   </script>
+   </body>
+</html>
