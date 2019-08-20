@@ -27,6 +27,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = default_headers + (
+'Content-Type',
+)
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Application definition
 
@@ -42,6 +49,10 @@ INSTALLED_APPS = [
     'hmmqtt',
     'machine',
     'userinfo',
+    'face',
+    'adminor',
+    'staff',
+    'guest',
 ]
 
 MIDDLEWARE = [
@@ -133,12 +144,11 @@ STATICFILES_DIRS = (
 
 
 from datetime import datetime, timedelta
+
 SECRET_KEY = "quscsacascascashmxiaobao"
 
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': timedelta(seconds=36000),
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),
-    'JWT_SECRET_KEY' :"quhmxiaobao",
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=36000),  # 表示issue出去的token多久过期，默认是5mins
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=1),  # 表示某个token被issue出去后，在多久间隔内可以用它来刷新以便获取新的token，默认是7天
     'JWT_SECRET_KEY': SECRET_KEY,
-
 }

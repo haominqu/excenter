@@ -1,4 +1,5 @@
 from django.db import models
+from uuid import uuid4
 
 # Create your models here.
 ROLE_CHOICES = (
@@ -26,6 +27,9 @@ class UserInfo(models.Model):
     password = models.CharField(verbose_name='密码', max_length=200,null=False)
     role = models.IntegerField(verbose_name='用户角色', choices=ROLE_CHOICES, default=4)
     is_active = models.IntegerField(verbose_name='激活状态', choices=ACTIVE_CHOICES, default=0)
+    user_secret = models.CharField(verbose_name='用户JWT秘钥', max_length=200, default=uuid4())
+    is_login = models.BooleanField(verbose_name='是否登录', default=False)
+
 
     def __str__(self):
         return self.username
@@ -36,9 +40,11 @@ class Guest(models.Model):
     realname = models.CharField(verbose_name="用户名", max_length=30, null=False)
     audit_status = models.IntegerField(verbose_name='审核状态', choices=AUDIT_CHOICES, default=0)
     face_picture = models.ImageField(verbose_name='面部照片', upload_to='image/guest/face', default='normal.png')
+    position = models.CharField(verbose_name="职位", max_length=30, null=True, blank=True)
+    department = models.CharField(verbose_name="公司", max_length=30, null=True, blank=True)
 
     def __str__(self):
-        return self
+        return self.realname
 
 class UserDetail(models.Model):
     user = models.OneToOneField(UserInfo, verbose_name="用户")
@@ -49,4 +55,4 @@ class UserDetail(models.Model):
     department = models.CharField(verbose_name="所属部门", max_length=30, null=False)
 
     def __str__(self):
-        return self
+        return self.realname

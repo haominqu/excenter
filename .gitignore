@@ -1,4 +1,3 @@
-excenteron/settings.py
 excenteron/__pycache__/*
 hmmqtt/migrations/*
 hmmqtt/__pycache__/*
@@ -6,5 +5,11 @@ machine/migrations/*
 machine/__pycache__/*
 userinfo/migrations/*
 userinfo/__pycache__/*
-
-
+adminor/migrations/*
+adminor/__pycache__/*
+face/migrations/*
+face/__pycache__/*
+guest/migrations/*
+guest/__pycache__/*
+staff/migrations/*
+staff/__pycache__/*

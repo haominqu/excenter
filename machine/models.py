@@ -42,7 +42,7 @@ class Machine(models.Model):
     mac_devID = models.CharField(verbose_name='设备码', max_length=50, null=False)
     mac_type = models.CharField(verbose_name='设备类型', max_length=50, null=False)
     gate = models.ForeignKey(Gate,verbose_name="网关")
-    scene= models.ForeignKey(Scene,verbose_name="场景")
+    scene = models.ForeignKey(Scene,verbose_name="场景")
     mac_ctype = models.IntegerField(verbose_name='设备属性', choices=SCE_TYPE_CHOICES, default=0)
 
     def __str__(self):

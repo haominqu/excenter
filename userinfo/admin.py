@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.hashers import make_password
 
 # selfproject
-from .models import UserInfo, Guest
+from .models import UserInfo, Guest, UserDetail
 
 # Register your models here.
 
@@ -18,3 +18,4 @@ class UserInfoAdmin(admin.ModelAdmin):
 
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Guest)
+admin.site.register(UserDetail)
