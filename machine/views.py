@@ -34,8 +34,9 @@ class ControllMachine(APIView):
         :param request:触发是可控设备
         :return:
         """
-        machine = Machine.objects.filter(mac_ctype=1)
-        machine_se = MachineSerializer(machine, many=True)
+        control_mac = ControlMac.objects.filter(mac__mac_ctype=1)
+        print(control_mac)
+        machine_se = ControlMacSerializer(control_mac, many=True)
         machine_data = machine_se.data
         result = True
         data = machine_data
