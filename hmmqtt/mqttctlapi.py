@@ -37,10 +37,37 @@ class LampAPI:
 
 class CurtainAPI:
 
-    def curtain_on(self):
+    def __hm_temp(self, gwID, devID, endpointNumber, commandId):
+        template = {"timestamp": "", "msgContent": "{\"cmd\": \"501\",\"gwID\": \""+gwID+"\",\"devID\": \""+devID+"\",\"clusterId\": 258,\"commandType\": 1,\"endpointNumber\": "+str(endpointNumber)+",\"commandId\": "+str(commandId)+"}"}
+        template = json.dumps(template)
+        return template
+
+    def __res_url(self,gwID):
+        url = 'gw/third/'+gwID+'/req'
+        return url
+
+    def curtain_on(self, mac_id):
+        machine = Machine.objects.filter(id=mac_id)[0]
+        gw_gwID = machine.gate.gw_gwID
+        payload = self.__hm_temp(gw_gwID, machine.mac_devID, machine.controlmac.endpointnum, 0)
+        api_url = self.__res_url(gw_gwID)
+        publish(api_url, payload, 2)
         return True
 
-    def curtain_off(self):
+    def curtain_off(self, mac_id):
+        machine = Machine.objects.filter(id=mac_id)[0]
+        gw_gwID = machine.gate.gw_gwID
+        payload = self.__hm_temp(gw_gwID, machine.mac_devID, machine.controlmac.endpointnum, 1)
+        api_url = self.__res_url(gw_gwID)
+        publish(api_url, payload, 2)
+        return True
+
+    def curtain_stop(self, mac_id):
+        machine = Machine.objects.filter(id=mac_id)[0]
+        gw_gwID = machine.gate.gw_gwID
+        payload = self.__hm_temp(gw_gwID, machine.mac_devID, machine.controlmac.endpointnum, 2)
+        api_url = self.__res_url(gw_gwID)
+        publish(api_url, payload, 2)
         return True
 
 

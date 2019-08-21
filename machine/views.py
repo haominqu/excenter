@@ -14,12 +14,11 @@ from .serializers import *
 class Lamp(APIView):
 
     def get(self, request):
-        al = request.GET.get('al')
-        print(al)
-        if al == '1':
-            LampAPI().lamp_on(1)
+        mac_id = request.GET.get('mac_id')
+        if mac_id == '1':
+            LampAPI().lamp_on(mac_id)
         else:
-            LampAPI().lamp_off(1)
+            LampAPI().lamp_off(mac_id)
         return JsonResponse({"code": '', "shuju": '', "msg": 'msg'})
 
 

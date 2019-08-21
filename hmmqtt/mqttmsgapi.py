@@ -55,24 +55,17 @@ class ReciveMessage:
                 endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
                 attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
                 # 获取当前触发设备
-
                 macv = Machine.objects.filter(mac_devID=devID)
                 # 判断设备是否为触发mac_ctype 0感应设备，1触发设备
-
                 if macv[0].mac_ctype == 0:
-
                     macs = ControlMac.objects.filter(mac__scene=macv[0].scene, mac__mac_ctype=1)
-
                     if attributeValue == '0':
-
                         # 修改触发设备状态
                         n = ControlMac.objects.filter(mac_id=macv[0].id)
-
                         n.update(mac_status=1)
                         macs.update(mac_status=1)
                         for m in macs:
                             hmmqtt.mqttctlapi.LampAPI().lamp_on(m.mac.id)
-
                     else:
                         # 次感应器状态回复
                         ControlMac.objects.filter(mac_id=macv[0].id).update(mac_status=0)
