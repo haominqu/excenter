@@ -6,5 +6,7 @@ machine/migrations/*
 machine/__pycache__/*
 userinfo/migrations/*
 userinfo/__pycache__/*
+history/migrations/*
+history/__pycache__/*
 
 
