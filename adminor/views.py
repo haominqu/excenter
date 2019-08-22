@@ -5,18 +5,25 @@ from rest_framework_jwt.settings import api_settings
 # django
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.decorators import method_decorator
+from django.conf import settings
 
 # self_project
 from userinfo.models import UserInfo, Guest, UserDetail
 from django.contrib.auth.hashers import check_password
-from userinfo.serializers import GuestSerializer, StaffSerializer, UserSerializer
+from .serializers import StaffSerializer, GuestSerializer
+from userinfo.permissions import IsAdmin, login_decorator
 
 # base
 import logging
+import time
+import os
+import shutil
 
 # Create your views here.
 
 class AdminLogin(APIView):
+
     """
         desc:管理员登录
     """
@@ -46,6 +53,11 @@ class AdminLogin(APIView):
             data = ""
             error = "用户名密码不正确"
             return JsonResponse({"result": result, "data": data, "error": error})
+        if user[0].role != int(1):
+            result = False
+            data = ""
+            error = "不是管理员"
+            return JsonResponse({"result": result, "data": data, "error": error})
         if user:
             jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
             jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -53,16 +65,46 @@ class AdminLogin(APIView):
             payload['role'] = user[0].role
             token = jwt_encode_handler(payload)
             user[0].user_secret = token
-            user.save()
+            user[0].is_login = True
+            user[0].save()
             result = True
             data = token
             error = ""
             return JsonResponse({"result": result, "data": data, "error": error})
 
 
-class AdminView(APIView):
-    """管理员对于人员的管理"""
+class UploadImage(APIView):
 
+    def post(self, request):
+        print("$$$$$$$")
+        face_picture = request.FILES.get('face_picture', '')
+        print(face_picture)
+        file_type = face_picture.name.split('.')[1]
+        print(file_type)
+        time_stamp = int(round(time.time() * 1000))
+        file_name = str(time_stamp) + '.' + file_type
+        print(file_name)
+        f = open(os.path.join(settings.BASE_DIR, 'media', 'tempory', file_name), 'wb')
+        for chunk in face_picture.chunks():
+            f.write(chunk)
+        f.close()
+        file_path = settings.BASE_URL+"/media/tempory/"+file_name
+        print(file_path)
+        result = True
+        data = file_path
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+
+
+class StaffManageView(APIView):
+    """管理员对于人员的管理"""
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
     def post(self, request):
         """
         管理员进行添加员工:包括手机号, 姓名, 员工编号, 职位, 所属部门, 人脸
@@ -73,11 +115,11 @@ class AdminView(APIView):
         """
         user_name = request.POST.get("user_name", "")  # 手机号
         real_name = request.POST.get("real_name", "")
-        start_code = request.POST.get("start_code", "")
+        staff_code = request.POST.get("staff_code", "")
         position = request.POST.get("position", "")
         department = request.POST.get("department", "")
-        face_picture = request.FILES.get('face_picture', '')
-        if user_name == "" or real_name == "" or start_code == "" or position == "" or department == "" or face_picture == "":
+        face_picture = request.POST.get('face_picture', '')
+        if user_name == "" or real_name == "" or staff_code == "" or position == "" or department == "" or face_picture == "":
             result = False
             data = ""
             error = "员工基本信息不能为空"
@@ -95,10 +137,21 @@ class AdminView(APIView):
         user_detail = UserDetail()
         user_detail.user = user_info
         user_detail.realname = real_name
-        user_detail.start_code = start_code
+        user_detail.staff_code = staff_code
         user_detail.position = position
         user_detail.department = department
-        user_detail.face_picture = face_picture
+        face_file_name = face_picture.split('/')[-1]
+        fixed_file_path = "/media/face_info/"
+        tempory_file_path = "/media/tempory/"
+        abs_path = os.getcwd()
+        for file in os.listdir(abs_path + tempory_file_path):
+            if file != face_file_name:
+                continue
+            else:
+                shutil.copy(os.path.join(abs_path + tempory_file_path, file),
+                            os.path.join(abs_path + fixed_file_path, file))
+                os.remove(os.path.join(abs_path + tempory_file_path, face_file_name))
+        user_detail.department = fixed_file_path + face_file_name
         try:
             user_info.save()
             user_detail.save()
@@ -113,6 +166,114 @@ class AdminView(APIView):
         error = "添加成功"
         return JsonResponse({"result": result, "data": data, "error": error})
 
+    @method_decorator(login_decorator)
+    def delete(self, request):
+        staff_id = request.data.get('staff_id', '')
+        if staff_id == "":
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        user = UserInfo.objects.filter(id=staff_id)
+        if not user:
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        try:
+            user[0].delete()
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            result = False
+            data = ""
+            error = "删除失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        result = False
+        data = ""
+        error = "删除成功"
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+
+
+
+
+
+
+class StaffList(APIView):
+    # permission_classes = (
+    #     IsAdmin,
+    # )
+
+    # @method_decorator(login_decorator)
+    def get(self, request):
+        """
+        desc:管理员获取员工列表
+        :param request:
+        :return:返回员工角色, 姓名, 用户名(手机号), 编号, 职位, 部门, 激活
+        """
+        staff = UserDetail.objects.filter(user__role=2)
+        # staff_info_list = []
+        # for stf in staff:
+        #     staff_info_dict = {}
+        #     staff_info_dict['user_id'] = stf.user_id
+        #     staff_info_dict['user_name'] = stf.user.username
+        #     staff_info_dict['role'] = stf.user.role
+        #     staff_info_dict['is_active'] = stf.user.is_active
+        #     staff_info_dict['real_name'] = stf.realname
+        #     staff_info_dict['staff_code'] = stf.staff_code
+        #     staff_info_dict['position'] = stf.position
+        #     staff_info_dict['department'] = stf.department
+        #     staff_info_list.append(staff_info_dict)
+        staff_se = StaffSerializer(staff, many=True)
+        staff_data = staff_se.data
+        result = True
+        # data = staff_info_list
+        data = staff_data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestList(APIView):
+    # permission_classes = (
+    #     IsAdmin,
+    # )
+
+    # @method_decorator(login_decorator)
+    def get(self, request):
+        """
+            desc:管理员获取所有来宾列表
+            :param request:
+            :return:返回来宾角色, 来宾用户名(手机号), 来宾姓名, 邀请人, 审核状态
+        """
+        guest = Guest.objects.filter(user__role=3, audit_status=1)
+        # guest_info_list = []
+        # for gue in guest:
+        #     guest_info_dict = {}
+        #     guest_info_dict['user_id'] = gue.user_id
+        #     guest_info_dict['user_name'] = gue.user.username
+        #     guest_info_dict['role'] = gue.user.role
+        #     guest_info_dict['real_name'] = gue.realname
+        #     guest_info_dict['invite'] = gue.invite.username
+        #     guest_info_dict['audit_status'] = gue.audit_status
+        #     guest_info_dict['position'] = gue.position
+        #     guest_info_dict['department'] = gue.department
+        #     guest_info_list.append(guest_info_dict)
+        guest_se = GuestSerializer(guest, many=True)
+        guest_data = guest_se.data
+        result = True
+        data = guest_data
+        # data = guest_info_list
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class AccountInPwdView(APIView):
+    # permission_classes = (
+    #     IsAdmin,
+    # )
+
+    # @method_decorator(login_decorator)
     def put(self, request):
         """
         管理员重置用户密码
@@ -122,67 +283,47 @@ class AdminView(APIView):
         :return:
         """
         user_id = request.data.get('user_id')
-        new_pwd = request.data.get('new_pwd')
-        if user_id == "" or new_pwd == "":
+        if user_id == "":
             result = False
             data = ""
             error = "用户信息不能为空"
             return JsonResponse({"result": result, "data": data, "error": error})
+        user = UserInfo.objects.filter(id=user_id)
+        if not user:
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        re_password = user[0].username[-4:-1]
         try:
-            UserInfo.objects.filter(id=user_id).update(password=new_pwd)
+            user.update(password=re_password)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             result = False
             data = ""
-            error = "密码修改失败"
+            error = "密码重置失败"
             return JsonResponse({"result": result, "data": data, "error": error})
         result = True
         data = "密码已重置"
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
 
+class AccountActive(APIView):
 
-class GuestList(APIView):
-
-    def get(self, request):
+    @method_decorator(login_decorator)
+    def post(self, request):
         """
-            desc:管理员获取所有来宾列表
-            :param request:
-            :return:返回来宾角色, 来宾用户名(手机号), 来宾姓名, 邀请人, 审核状态
-        """
-        guest = Guest.objects.filter(user__role=3)
-        guest_se = GuestSerializer(guest, many=True)
-        guest_data = guest_se.data
-        result = True
-        data = guest_data
-        error = ""
-        return JsonResponse({"result": result, "data": data, "error": error})
-
-
-class StaffList(APIView):
-
-    def get(self, request):
-        """
-        desc:管理员获取员工列表
-        :param request:
-        :return:返回员工角色, 姓名, 用户名(手机号), 编号, 职位, 部门, 激活
-        """
-        staff = UserDetail.objects.filter(user__role=2)
-        staff_se = StaffSerializer(staff, many=True)
-        staff_data = staff_se.data
-        result = True
-        data = staff_data
-        error = ""
-        return JsonResponse({"result": result, "data": data, "error": error})
-
-    def put(self, request):
-        """
-        desc: 管理员进行员工账号激活、停用
+        desc: 管理员进行员工, 来宾账号激活、锁定
         :param request:
         :return:
         """
-        staff_id = request.data.get("staff_id", "")
-        is_active = request.data.get("is_active", "")
+        staff_id = request.POST.get("user_id", "")
+        is_active = request.POST.get("is_active", "")
+        if staff_id == "" or is_active == "":
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
         staff = UserInfo.objects.filter(id=staff_id)
         if not staff:
             result = False
@@ -191,7 +332,7 @@ class StaffList(APIView):
             return JsonResponse({"result": result, "data": data, "error": error})
         try:
             staff[0].is_active = is_active
-            staff.save()
+            staff[0].save()
         except ObjectDoesNotExist as e:
             logging.warning(e)
         result = True
@@ -200,27 +341,8 @@ class StaffList(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
-class AdminInfo(APIView):
 
-    def get(self, request, **kwargs):
-        """
-        desc:管理员个人信息
-        :param request:
-        :return:
-        """
-        token = kwargs['token']
-        admin_id = token['user_id']
-        admin = UserInfo.objects.filter(id=admin_id)
-        if not admin:
-            result = False
-            data = ""
-            error = ""
-            return JsonResponse({"result": result, "data": data, "error": error})
-        admin_se = UserSerializer(admin, many=False)
-        admin_data = admin_se.data
-        result = False
-        data = admin_data
-        error = ""
-        return JsonResponse({"result": result, "data": data, "error": error})
+
+
 
 
