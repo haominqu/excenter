@@ -177,14 +177,14 @@ class UserAlterPwd(APIView):
             data = ""
             error = "密码错误"
             return JsonResponse({"result": result, "data": data, "error": error})
-        if old_pwd != c_pwd:
+        if new_pwd != c_pwd:
             result = False
             data = ""
             error = "两次密码不一致"
             return JsonResponse({"result": result, "data": data, "error": error})
         new_pwd = make_password(new_pwd, None, 'pbkdf2_sha256')
         try:
-            user[0].update(password=new_pwd)
+            user.update(password=new_pwd)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             result = False
