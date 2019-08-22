@@ -18,6 +18,7 @@ from userinfo.permissions import IsAdmin, login_decorator
 import logging
 import time
 import os
+import shutil
 
 # Create your views here.
 
@@ -117,7 +118,7 @@ class StaffManageView(APIView):
         staff_code = request.POST.get("staff_code", "")
         position = request.POST.get("position", "")
         department = request.POST.get("department", "")
-        face_picture = request.FILES.get('face_picture', '')
+        face_picture = request.POST.get('face_picture', '')
         if user_name == "" or real_name == "" or staff_code == "" or position == "" or department == "" or face_picture == "":
             result = False
             data = ""
@@ -139,7 +140,18 @@ class StaffManageView(APIView):
         user_detail.staff_code = staff_code
         user_detail.position = position
         user_detail.department = department
-        user_detail.face_picture = face_picture
+        face_file_name = face_picture.split('/')[-1]
+        fixed_file_path = "/media/face_info/"
+        tempory_file_path = "/media/tempory/"
+        abs_path = os.getcwd()
+        for file in os.listdir(abs_path + tempory_file_path):
+            if file != face_file_name:
+                continue
+            else:
+                shutil.copy(os.path.join(abs_path + tempory_file_path, file),
+                            os.path.join(abs_path + fixed_file_path, file))
+                os.remove(os.path.join(abs_path + tempory_file_path, face_file_name))
+        user_detail.department = fixed_file_path + face_file_name
         try:
             user_info.save()
             user_detail.save()

@@ -5,7 +5,7 @@ from rest_framework_jwt.settings import api_settings
 
 # django
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 
@@ -154,6 +154,47 @@ class StaffGuestLogout(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
+class UserAlterPwd(APIView):
+    def put(self, request):
+        user_id = request.data.get('user_id', '')
+        old_pwd = request.data.get('old_pwd', '')
+        new_pwd = request.data.get('new_pwd', '')
+        c_pwd = request.data.get('c_pwd', '')
+        if user_id == "" or old_pwd == "" or new_pwd == "" or c_pwd == "":
+            result = False
+            data = ""
+            error = "用户名密码不能为空"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        user = UserInfo.objects.filter(id=user_id)
+        if not user:
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        is_pwd = check_password(old_pwd, user[0].password)
+        if not is_pwd:
+            result = False
+            data = ""
+            error = "密码错误"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        if old_pwd != c_pwd:
+            result = False
+            data = ""
+            error = "两次密码不一致"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        new_pwd = make_password(new_pwd, None, 'pbkdf2_sha256')
+        try:
+            user[0].update(password=new_pwd)
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            result = False
+            data = ""
+            error = "密码修改失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        result = True
+        data = ""
+        error = "密码修改成功"
+        return JsonResponse({"result": result, "data": data, "error": error})
 
 
 
