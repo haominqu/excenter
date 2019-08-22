@@ -33,5 +33,7 @@ urlpatterns = [
     url(r'^phone/$', TemplateView.as_view(template_name="phone.html"), name='phone'),
     url(r'^phoned/', TemplateView.as_view(template_name="phoned.html"), name='phoned'),
     url(r'^phchpwd/', TemplateView.as_view(template_name="ph_change_pwd.html"), name='phchpwd'),
+    url(r'^invite/', TemplateView.as_view(template_name="ph_invite.html"), name='invite'),
+    url(r'^inviteadd/', TemplateView.as_view(template_name="ph_invite_add.html"), name='inviteadd'),
 
 ]
