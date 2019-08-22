@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from machine.models import *
 import hmmqtt
 import json
+from userinfo.views import *
 # Create your views here.
 
 
@@ -10,9 +11,12 @@ class ReciveMessage:
 
     def readmessage(self, client, userdata, message):
         # message.topic
+
         topical = message.topic.split('/')[-1]
         out = str(message.payload.decode('utf-8'))
         msg = json.loads(out)
+        print(topical)
+        print(msg)
         mac_mode = MacSetting.objects.all()[0]
         if topical == "data":
             # 手动模式
@@ -23,9 +27,17 @@ class ReciveMessage:
                 attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
                 mac = Machine.objects.filter(mac_devID=devID)
                 if mac:
-                    ControlMac.objects.filter(mac=mac,endpointnum=endpointNumber).update(mac_status=attributeValue)
+                    now_mc = ControlMac.objects.filter(mac=mac,endpointnum=endpointNumber)
+                    now_mc.update(mac_status=attributeValue)
                 # if mac_detail['type'] == '19':
-                # print(msg)
+                backdata = {}
+                backdata["mac_id"] = now_mc[0].mac.id
+                backdata["mac_sty"] = now_mc[0].mac.mac_type
+                backdata['mac_st'] = now_mc[0].mac_status
+                backdata['mac_type'] = '2'
+
+                send_web_msg('', str(backdata).replace('\'', '\"'))
+
             # 自动模式
             elif mac_mode.mac_mode == 1:
                 # 更新数据
@@ -37,8 +49,9 @@ class ReciveMessage:
                 if mac:
                     ControlMac.objects.filter(mac_id=mac[0].id, endpointnum=endpointNumber).update(mac_status=attributeValue)
 
-        elif topical == "alarm":
 
+
+        elif topical == "alarm":
             if mac_mode.mac_mode == 2:
                 mac_detail = json.loads(msg['msgContent'])
                 devID = mac_detail['devID']
@@ -46,7 +59,15 @@ class ReciveMessage:
                 attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
                 mac = Machine.objects.filter(mac_devID=devID)
                 if mac:
-                    ControlMac.objects.filter(mac=mac, endpointnum=endpointNumber).update(mac_status=attributeValue)
+                    now_mc = ControlMac.objects.filter(mac=mac, endpointnum=endpointNumber)
+                    now_mc.update(mac_status=attributeValue)
+                # 返回数据到前端
+                backdata = {}
+                backdata["mac_id"]=now_mc[0].mac.id
+                backdata['mac_st']=now_mc[0].mac_status
+                backdata['mac_type']='1'
+
+                send_web_msg('',str(backdata).replace('\'','\"'))
                 # if mac_detail['type'] == '62':
                 # 判断自动手动
             elif mac_mode.mac_mode == 1:

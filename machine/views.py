@@ -15,11 +15,12 @@ class Lamp(APIView):
 
     def get(self, request):
         mac_id = request.GET.get('mac_id')
-        if mac_id == '1':
+        mac_st = request.GET.get('mac_st')
+        if mac_st == '1':
             LampAPI().lamp_on(mac_id)
         else:
             LampAPI().lamp_off(mac_id)
-        return JsonResponse({"code": '', "shuju": '', "msg": 'msg'})
+        return JsonResponse({"code": '', "shuju": '', "msg": 'success'})
 
 
 class ControllMachine(APIView):

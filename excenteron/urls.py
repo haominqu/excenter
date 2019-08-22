@@ -24,12 +24,14 @@ urlpatterns = [
     url(r'^hmmqtt/', include('hmmqtt.urls')),
     url(r'^onlinemac/', include('machine.urls')),
     url(r'^index/', TemplateView.as_view(template_name="index.html"), name='index'),
-    url(r'^phone/', TemplateView.as_view(template_name="phone.html"), name='phone'),
-    url(r'^phoned/', TemplateView.as_view(template_name="phoned.html"), name='phoned'),
     url(r'^face/', include('face.urls')),
     url(r'^adminor/', include('adminor.urls')),
     url(r'^staff/', include('staff.urls')),
     url(r'^guest/', include('guest.urls')),
     url(r'drugcon/$', TemplateView.as_view(template_name='drugcon.html'), name='drugcon'),
+# phone
+    url(r'^phone/$', TemplateView.as_view(template_name="phone.html"), name='phone'),
+    url(r'^phoned/', TemplateView.as_view(template_name="phoned.html"), name='phoned'),
+    url(r'^phchpwd/', TemplateView.as_view(template_name="ph_change_pwd.html"), name='phchpwd'),
 
 ]
