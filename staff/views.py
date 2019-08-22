@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.contrib.auth.hashers import check_password
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 # selfproject
 from userinfo.models import *
@@ -16,9 +17,11 @@ from userinfo.permissions import *
 
 # base
 import logging
+import time
+import os
+import shutil
 
 # Create your views here.
-
 
 
 class StaffInfo(APIView):
@@ -80,3 +83,137 @@ class StaffInfo(APIView):
         data = "密码已修改"
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class UploadImage(APIView):
+    # permission_classes = (
+    #     IsStaff,
+    # )
+    """
+    desc:手机端,业务人员添加来宾人脸图
+    """
+
+    def post(self, request):
+        face_picture = request.FILES.get('face_picture', '')
+        print("###", type(face_picture))
+        file_type = face_picture.name.split('.')[1]
+        time_stamp = int(round(time.time() * 1000))
+        file_name = str(time_stamp) + '.' + file_type
+        f = open(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name), 'wb')
+        for chunk in face_picture.chunks():
+            f.write(chunk)
+        f.close()
+        file_path = settings.BASE_URL+"/media/tempory_m/"+file_name
+        result = True
+        data = file_path
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestManageView(APIView):
+    permission_classes = (
+        IsStaff,
+    )
+
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        """
+        desc:员工邀约来宾
+        :param request:
+        :return:
+        """
+        token = kwargs['tokem']
+        staff_id = token['user_id']
+        user_name = request.POST.get("user_name", "")  # 手机号
+        real_name = request.POST.get("real_name", "")
+        position = request.POST.get("position", "")  # 职位(允许为空)
+        department = request.POST.get("department", "")  # 公司(允许为空)
+        face_picture = request.POST.get("face_picture", "")
+        if user_name == "" or real_name == "" or face_picture == "":
+            result = False
+            data = ""
+            error = "来宾基础信息不能为空"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        staff = UserInfo.objects.filter(id=staff_id)
+        if not staff:
+            result = False
+            data = ""
+            error = "员工信息有误"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        user_name_fit = UserInfo.objects.filter(username=user_name)
+        if user_name_fit:
+            result = False
+            data = ""
+            error = "该手机已注册"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        user_info = UserInfo()
+        user_info.username = user_name
+        user_info.password = user_name[-4:]
+        user_info.role = 3
+        try:
+            user_info.save()
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            result = False
+            data = ""
+            error = "添加失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        user = UserInfo.objects.filter(id=user_info.id)
+        if not user:
+            user_info.delete()
+        guest = Guest()
+        guest.user = user_info
+        guest.invite = staff
+        guest.realname = real_name
+        face_file_name = face_picture.split('/')[-1]
+        fixed_file_path = "/media/face_info/guest/"
+        tempory_file_path = "/media/tempory_m/"
+        abs_path = os.getcwd()
+        for file in os.listdir(abs_path + tempory_file_path):
+            if file != face_file_name:
+                continue
+            else:
+                shutil.copy(os.path.join(abs_path + tempory_file_path, file),
+                            os.path.join(abs_path + fixed_file_path, file))
+                os.remove(os.path.join(abs_path + tempory_file_path, face_file_name))
+        guest.face_picture = "/face_info/guest/" + face_file_name
+        try:
+            guest.save()
+        except ObjectDoesNotExist as e:
+            user_info.delete()
+            logging.error(e)
+            result = False
+            data = ""
+            error = "添加失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        result = True
+        data = "已成功邀约来宾"
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+
+class GuestList(APIView):
+    permission_classes = (
+        IsStaff,
+    )
+
+    @method_decorator(login_decorator)
+    def get(self, request, **kwargs):
+        """
+            desc:业务人员获取自己邀请的来宾列表
+            :param request:
+            :return:返回来宾角色, 来宾用户名(手机号), 来宾姓名, 邀请人, 审核状态
+        """
+        token = kwargs['token']
+        staff_id = token['user_id']
+        guest = Guest.objects.filter(user__role=3, invite_id=staff_id)
+        guest_se = GuestSerializer(guest, many=True)
+        guest_data = guest_se.data
+        result = True
+        data = guest_data
+        # data = guest_info_list
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
