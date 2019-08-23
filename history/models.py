@@ -2,7 +2,13 @@ from django.db import models
 
 # Create your models here.
 class UseHistory(models.Model):
-    pass
+    userid = models.CharField(verbose_name="用户id", max_length=50, default='')
+    macid = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    temtime = models.DateTimeField(verbose_name="操作时间", auto_now_add=True)
+    detail = models.CharField(verbose_name="操作详情", max_length=50, default=0)
+
+    def __str__(self):
+        return self.userid
 
 
 class MachineHistory(models.Model):
@@ -10,19 +16,43 @@ class MachineHistory(models.Model):
 
 
 class TemperatureHistory(models.Model):
-    pass
+    temNo = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    temname = models.CharField(verbose_name="感应器名称", max_length=50, default='')
+    temtime = models.DateTimeField(verbose_name="温度时间", auto_now_add=True)
+    temtem = models.CharField(verbose_name="温度", max_length=50, default=0)
+
+    def __str__(self):
+        return self.temname
 
 
 class COtHistory(models.Model):
-    pass
+    coNo = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    coname = models.CharField(verbose_name="感应器名称", max_length=50, default='')
+    cotime = models.DateTimeField(verbose_name="CO2时间", auto_now_add=True)
+    cotem = models.CharField(verbose_name="co2度", max_length=50, default=0)
+
+    def __str__(self):
+        return self.coname
 
 
 class PMHistory(models.Model):
-    pass
+    pmNo = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    pmname = models.CharField(verbose_name="感应器名称", max_length=50, default='')
+    pmtime = models.DateTimeField(verbose_name="PM2.5时间", auto_now_add=True)
+    pmtem = models.CharField(verbose_name="PM2.5度", max_length=50, default=0)
+
+    def __str__(self):
+        return self.pmname
 
 
 class HumidityHistory(models.Model):
-    pass
+    humNo = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    humname = models.CharField(verbose_name="感应器名称", max_length=50, default='')
+    humtime = models.DateTimeField(verbose_name="湿度时间", auto_now_add=True)
+    humtem = models.CharField(verbose_name="湿度", max_length=50, default=0)
+
+    def __str__(self):
+        return self.humname
 
 
 class LigthHistory(models.Model):

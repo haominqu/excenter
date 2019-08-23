@@ -94,7 +94,7 @@ class UploadImage(APIView):
     """
 
     def post(self, request):
-        face_picture = request.FILES.get('face_picture', '')
+        face_picture = request.FILES.get('myfiles', '')
         print("###", type(face_picture))
         file_type = face_picture.name.split('.')[1]
         time_stamp = int(round(time.time() * 1000))
