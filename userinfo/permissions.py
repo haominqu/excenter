@@ -19,8 +19,8 @@ def login_decorator(func):
             data = ""
             error = "身份已经过期，请重新登入"
             return JsonResponse({"result": result, "data": data, "error": error})
-        front_token = jwt_decode_handler(token.split(' ')[1])
-        user_jwt = UserInfo.objects.filter(user_secret=token.split(' ')[1])
+        front_token = jwt_decode_handler(token.split(' ')[2])
+        user_jwt = UserInfo.objects.filter(user_secret=token.split(' ')[2])
         if not user_jwt:
             result = False
             data = ""

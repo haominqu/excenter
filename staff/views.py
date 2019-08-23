@@ -93,6 +93,7 @@ class UploadImage(APIView):
     desc:手机端,业务人员添加来宾人脸图
     """
 
+    @method_decorator(login_decorator)
     def post(self, request):
         face_picture = request.FILES.get('face_picture', '')
         print("###", type(face_picture))
@@ -177,6 +178,8 @@ class GuestManageView(APIView):
                             os.path.join(abs_path + fixed_file_path, file))
                 os.remove(os.path.join(abs_path + tempory_file_path, face_file_name))
         guest.face_picture = "/face_info/guest/" + face_file_name
+        guest.position = position
+        guest.department = department
         try:
             guest.save()
         except ObjectDoesNotExist as e:
@@ -190,7 +193,6 @@ class GuestManageView(APIView):
         data = "已成功邀约来宾"
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
-
 
 
 class GuestList(APIView):

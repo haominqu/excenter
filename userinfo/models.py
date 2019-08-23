@@ -39,8 +39,8 @@ class Guest(models.Model):
     invite = models.ForeignKey(UserInfo, verbose_name='邀请人', related_name='inviter')
     realname = models.CharField(verbose_name="用户名", max_length=30, null=False)
     audit_status = models.IntegerField(verbose_name='审核状态', choices=AUDIT_CHOICES, default=0)
-    face_picture = models.ImageField(verbose_name='面部照片', upload_to='image/guest/face', default='normal.png')
-    position = models.CharField(verbose_name="职位", max_length=30, null=True, blank=True)
+    face_picture = models.ImageField(verbose_name='面部照片', upload_to='face_info/guest/', default='normal.png')
+    position = models.CharField(verbose_name="职位", max_length=200, null=True, blank=True)
     department = models.CharField(verbose_name="公司", max_length=30, null=True, blank=True)
 
     def __str__(self):
@@ -49,7 +49,7 @@ class Guest(models.Model):
 class UserDetail(models.Model):
     user = models.OneToOneField(UserInfo, verbose_name="用户")
     realname = models.CharField(verbose_name="用户名", max_length=30, null=False)
-    face_picture = models.ImageField(verbose_name='面部照片', upload_to='image/guest/face', default='normal.png')
+    face_picture = models.ImageField(verbose_name='面部照片', upload_to='face_info/staff/', default='normal.png')
     staff_code = models.CharField(verbose_name="员工编号", max_length=30, null=False)
     position = models.CharField(verbose_name="职位", max_length=30, null=False)
     department = models.CharField(verbose_name="所属部门", max_length=30, null=False)

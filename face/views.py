@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # self_project
 from userinfo.models import UserInfo, Guest, UserDetail
-from userinfo.serializers import GuestSerializer
+
 
 # base
 import logging
@@ -41,48 +41,7 @@ class StaffFaceView(APIView):
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
 
-    def post(self, request):
-        """
-        desc:员工邀约来宾,注册来宾人脸信息
-        :param request:
-        :return:
-        """
-        staff_id = request.POST.get("staff_id", "")
-        user_name = request.POST.get("user_name", "")  # 手机号
-        real_name = request.POST.get("real_name", "")
-        face_picture = request.POST.get("face_picture", "")
-        if staff_id == "" or user_name == "" or real_name == "" or face_picture == "":
-            result = False
-            data = ""
-            error = "来宾基础信息不能为空"
-            return JsonResponse({"result": result, "data": data, "error": error})
-        staff = UserInfo.objects.filter(id=staff_id)
-        if not staff:
-            result = False
-            data = ""
-            error = "员工信息有误"
-            return JsonResponse({"result": result, "data": data, "error": error})
-        user_name_fit = UserInfo.objects.filter(username=user_name)
-        if user_name_fit:
-            result = False
-            data = ""
-            error = "该手机已注册"
-            return JsonResponse({"result": result, "data": data, "error": error})
-        user_info = UserInfo()
-        user_info.username = user_name
-        user_info.password = user_name[-4: -1]
-        user_info.role = 3
-        user_info.save()
-        guest = Guest()
-        guest.user_id = user_info.id
-        guest.invite_id = staff.id
-        guest.realname = real_name
-        guest.face_picture = face_picture
-        guest.save()
-        result = True
-        data = "已成功邀约来宾"
-        error = ""
-        return JsonResponse({"result": result, "data": data, "error": error})
+
 
     def delete(self, request, **kwargs):
         """

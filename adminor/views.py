@@ -74,28 +74,27 @@ class AdminLogin(APIView):
 
 
 class UploadImage(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
 
-    def post(self, request):
-        print("$$$$$$$")
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
         face_picture = request.FILES.get('face_picture', '')
         print(face_picture)
+        print(type(face_picture))
         file_type = face_picture.name.split('.')[1]
-        print(file_type)
         time_stamp = int(round(time.time() * 1000))
         file_name = str(time_stamp) + '.' + file_type
-        print(file_name)
         f = open(os.path.join(settings.BASE_DIR, 'media', 'tempory', file_name), 'wb')
         for chunk in face_picture.chunks():
             f.write(chunk)
         f.close()
         file_path = settings.BASE_URL+"/media/tempory/"+file_name
-        print(file_path)
         result = True
         data = file_path
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
-
-
 
 
 class StaffManageView(APIView):
@@ -105,7 +104,7 @@ class StaffManageView(APIView):
     )
 
     @method_decorator(login_decorator)
-    def post(self, request):
+    def post(self, request, **kwargs):
         """
         管理员进行添加员工:包括手机号, 姓名, 员工编号, 职位, 所属部门, 人脸
         密码默认手机号后4位,
@@ -132,8 +131,16 @@ class StaffManageView(APIView):
             return JsonResponse({"result": result, "data": data, "error": error})
         user_info = UserInfo()
         user_info.username = user_name
-        user_info.password = user_name[-4: -1]
+        user_info.password = user_name[-4: ]
         user_info.role = 2
+        try:
+            user_info.save()
+        except ObjectDoesNotExist as e:
+            logging.error(e)
+            result = False
+            data = ""
+            error = "添加失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
         user_detail = UserDetail()
         user_detail.user = user_info
         user_detail.realname = real_name
@@ -141,7 +148,7 @@ class StaffManageView(APIView):
         user_detail.position = position
         user_detail.department = department
         face_file_name = face_picture.split('/')[-1]
-        fixed_file_path = "/media/face_info/"
+        fixed_file_path = "/media/face_info/staff/"
         tempory_file_path = "/media/tempory/"
         abs_path = os.getcwd()
         for file in os.listdir(abs_path + tempory_file_path):
@@ -151,11 +158,11 @@ class StaffManageView(APIView):
                 shutil.copy(os.path.join(abs_path + tempory_file_path, file),
                             os.path.join(abs_path + fixed_file_path, file))
                 os.remove(os.path.join(abs_path + tempory_file_path, face_file_name))
-        user_detail.department = fixed_file_path + face_file_name
+        user_detail.face_picture = "/face_info/staff/" + face_file_name
         try:
-            user_info.save()
             user_detail.save()
         except ObjectDoesNotExist as e:
+            user_info.delete()
             logging.error(e)
             result = False
             data = ""
@@ -167,7 +174,7 @@ class StaffManageView(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
     @method_decorator(login_decorator)
-    def delete(self, request):
+    def delete(self, request, *args, **kwargs):
         staff_id = request.data.get('staff_id', '')
         if staff_id == "":
             result = False
@@ -188,83 +195,190 @@ class StaffManageView(APIView):
             data = ""
             error = "删除失败"
             return JsonResponse({"result": result, "data": data, "error": error})
-        result = False
+        result = True
         data = ""
         error = "删除成功"
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
 
-
-
-
-
-
 class StaffList(APIView):
-    # permission_classes = (
-    #     IsAdmin,
-    # )
+    permission_classes = (
+        IsAdmin,
+    )
 
-    # @method_decorator(login_decorator)
-    def get(self, request):
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
         """
         desc:管理员获取员工列表
         :param request:
         :return:返回员工角色, 姓名, 用户名(手机号), 编号, 职位, 部门, 激活
         """
         staff = UserDetail.objects.filter(user__role=2)
-        # staff_info_list = []
-        # for stf in staff:
-        #     staff_info_dict = {}
-        #     staff_info_dict['user_id'] = stf.user_id
-        #     staff_info_dict['user_name'] = stf.user.username
-        #     staff_info_dict['role'] = stf.user.role
-        #     staff_info_dict['is_active'] = stf.user.is_active
-        #     staff_info_dict['real_name'] = stf.realname
-        #     staff_info_dict['staff_code'] = stf.staff_code
-        #     staff_info_dict['position'] = stf.position
-        #     staff_info_dict['department'] = stf.department
-        #     staff_info_list.append(staff_info_dict)
         staff_se = StaffSerializer(staff, many=True)
         staff_data = staff_se.data
         result = True
-        # data = staff_info_list
         data = staff_data
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
-class GuestList(APIView):
-    # permission_classes = (
-    #     IsAdmin,
-    # )
+class AccountActive(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
 
-    # @method_decorator(login_decorator)
-    def get(self, request):
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        """
+        desc: 管理员进行员工账号激活、锁定
+        :param request:
+        :return:
+        """
+        staff_id = request.POST.get("user_id", "")
+        is_active = request.POST.get("is_active", "")
+        if staff_id == "" or is_active == "":
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        staff = UserInfo.objects.filter(id=staff_id)
+        if not staff:
+            result = False
+            data = ""
+            error = "员工信息错误"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        try:
+            staff[0].is_active = is_active
+            staff[0].save()
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+        result = True
+        data = ""
+        error = "状态更改成功"
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestList(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
         """
             desc:管理员获取所有来宾列表
             :param request:
             :return:返回来宾角色, 来宾用户名(手机号), 来宾姓名, 邀请人, 审核状态
         """
-        guest = Guest.objects.filter(user__role=3, audit_status=1)
-        # guest_info_list = []
-        # for gue in guest:
-        #     guest_info_dict = {}
-        #     guest_info_dict['user_id'] = gue.user_id
-        #     guest_info_dict['user_name'] = gue.user.username
-        #     guest_info_dict['role'] = gue.user.role
-        #     guest_info_dict['real_name'] = gue.realname
-        #     guest_info_dict['invite'] = gue.invite.username
-        #     guest_info_dict['audit_status'] = gue.audit_status
-        #     guest_info_dict['position'] = gue.position
-        #     guest_info_dict['department'] = gue.department
-        #     guest_info_list.append(guest_info_dict)
+        guest = Guest.objects.filter(user__role=3, audit_status=0)
         guest_se = GuestSerializer(guest, many=True)
         guest_data = guest_se.data
         result = True
         data = guest_data
-        # data = guest_info_list
         error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestAudit(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        """
+        desc: 管理员对来宾信息进行审核
+        :param request:
+        :return:
+        """
+        guest_id = request.POST.get("guest_id", "")
+        is_audit = request.POST.get("is_audit", "")
+        print(guest_id, is_audit)
+        if guest_id == "" or is_audit == "":
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        guest = Guest.objects.filter(user_id=guest_id)
+        if not guest:
+            result = False
+            data = ""
+            error = "来宾信息错误"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        try:
+            guest[0].audit_status = is_audit
+            guest[0].save()
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            result = False
+            data = ""
+            error = "审核失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        result = True
+        data = ""
+        error = "审核通过"
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestIsAuditList(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
+        """
+            desc:管理员获取已被审核通过的来宾列表
+            :param request:
+            :return:返回来宾角色, 来宾用户名(手机号), 来宾姓名, 邀请人, 审核状态
+        """
+        guest = Guest.objects.filter(user__role=3, audit_status=1)
+        guest_se = GuestSerializer(guest, many=True)
+        guest_data = guest_se.data
+        result = True
+        data = guest_data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class GuestActive(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+    def post(self, request, *args, **kwargs):
+        """
+        desc: 管理员进行员工账号激活、锁定
+        :param request:
+        :return:
+        """
+        guest_id = request.POST.get("user_id", "")
+        is_active = request.POST.get("is_active", "")
+        if guest_id == "" or is_active == "":
+            result = False
+            data = ""
+            error = ""
+            return JsonResponse({"result": result, "data": data, "error": error})
+        guest = UserInfo.objects.filter(id=guest_id)
+        if not guest:
+            result = False
+            data = ""
+            error = "来宾信息错误"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        try:
+            guest[0].is_active = is_active
+            guest[0].save()
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            result = False
+            data = ""
+            error = "状态更改失败"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        result = True
+        data = ""
+        error = "状态更改成功"
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
@@ -308,37 +422,6 @@ class AccountInPwdView(APIView):
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
 
-class AccountActive(APIView):
-
-    @method_decorator(login_decorator)
-    def post(self, request):
-        """
-        desc: 管理员进行员工, 来宾账号激活、锁定
-        :param request:
-        :return:
-        """
-        staff_id = request.POST.get("user_id", "")
-        is_active = request.POST.get("is_active", "")
-        if staff_id == "" or is_active == "":
-            result = False
-            data = ""
-            error = ""
-            return JsonResponse({"result": result, "data": data, "error": error})
-        staff = UserInfo.objects.filter(id=staff_id)
-        if not staff:
-            result = False
-            data = ""
-            error = "员工信息错误"
-            return JsonResponse({"result": result, "data": data, "error": error})
-        try:
-            staff[0].is_active = is_active
-            staff[0].save()
-        except ObjectDoesNotExist as e:
-            logging.warning(e)
-        result = True
-        data = ""
-        error = "状态更改成功"
-        return JsonResponse({"result": result, "data": data, "error": error})
 
 
 
