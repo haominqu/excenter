@@ -32,13 +32,31 @@ class Lamp(APIView):
         return JsonResponse({"code": '', "shuju": '', "msg": 'success'})
 
 
+class ControllMachineM(APIView):
+    """
+    desc:可控设备
+    """
+    @method_decorator(login_decorator)
+    def get(self, request, *args, **kwargs):
+        """
+        desc:可控设备列表
+        :param request:触发是可控设备
+        :return:
+        """
+        control_mac = ControlMac.objects.filter(mac__mac_ctype=1)
+        machine_se = ControlMacSerializer(control_mac, many=True)
+        machine_data = machine_se.data
+        result = True
+        data = machine_data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+
 class ControllMachine(APIView):
     """
     desc:可控设备
     """
-    permission_classes = (
-        IsAdmin,
-    )
 
     @method_decorator(login_decorator)
     def get(self, request, *args, **kwargs):
