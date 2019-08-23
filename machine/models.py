@@ -17,6 +17,19 @@ SCE_TYPE_CHOICES = (
     (1,'触发'),
     (2,'数据'),
 )
+
+ACTIVE_CHOICES = (
+    (0, '未激活'),
+    (1, '激活'),
+    (2, '停用'),
+)
+
+STATUS_CHOICES = (
+    (0, '故障'),
+    (1, '运行中'),
+    (2, '已停用'),
+    (3, '检修中'),
+)
 # Create your models here.
 
 
@@ -44,6 +57,9 @@ class Machine(models.Model):
     gate = models.ForeignKey(Gate,verbose_name="网关")
     scene = models.ForeignKey(Scene,verbose_name="场景")
     mac_ctype = models.IntegerField(verbose_name='设备属性', choices=SCE_TYPE_CHOICES, default=0)
+    is_active = models.IntegerField(verbose_name='激活状态', choices=ACTIVE_CHOICES, default=1)
+    status = models.IntegerField(verbose_name='设备状态', choices=STATUS_CHOICES, default=1)
+
 
     def __str__(self):
         return self.mac_name

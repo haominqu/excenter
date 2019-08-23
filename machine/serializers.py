@@ -11,9 +11,19 @@ class MachineSerializer(serializers.ModelSerializer):
     def gate_field(self, obj):
         return obj.gate.gw_name
 
+    scene = serializers.SerializerMethodField('scene_field')
+
+    def scene_field(self, obj):
+        return obj.scene.sc_name
+
+    mac_ctype = serializers.SerializerMethodField('mac_ctype_field')
+    def mac_ctype_field(self, obj):
+        return obj.get_mac_ctype_display()
+
+
     class Meta:
         model = Machine
-        fields = ('id', 'mac_name', 'mac_devID', 'mac_type', 'gate', 'scene', 'mac_ctype')
+        fields = ('id', 'mac_name', 'mac_devID', 'mac_type', 'gate', 'scene', 'mac_ctype', 'is_active', 'status')
 
 
 class ControlMacSerializer(serializers.ModelSerializer):
