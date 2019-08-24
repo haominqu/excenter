@@ -9,32 +9,129 @@
     </head>
     <body>
         <div class="index_top">
-            <span> AAAA</span>
+            <span> 达内科技</span>
         </div>
-        <div class="index_top">
+        <div class="index_topl">
             <span> 北京 </span>
             <span>
                 <img src="../static/images/weather/weathy_01.png" class="weatherimg">
-                <span class="weathertext">晴朗 15度</span>
+                <span class="weathertext">Sunny 15C</span>
             </span>
         </div>
+        <div style="width: 84%;margin-left: 8%;border-top: rgba(110,118,122,0.34) 3px solid;float: left"></div>
         <div class="hm_totle">
             <div name="showpfirst"  class="hm_dis">
-    abc1
+                <div class="hm_ctr_tol">
+                    <div class="hm_ctr_block">
+                        <div>灯</div>
+                        <div _mid="1"><img src="../static/images/icon/lamp.png"></div>
+
+{#                            <input type="button" name="ctr_btn" _mid="1" onclick="ctr_mac(1,1)" value="开">#}
+                            <div class="switch">
+                                <input type="checkbox" onclick="ctr_mac(1,1)"  id="control" class="control">
+                                <label for="control" class="checkbox"></label>
+                            </div>
+
+                    </div>
+                </div>
+
             </div>
-            <div name="showpsecond"  class="showp">
-                <div class="index_block">温度</div>
-                <div id="temperature"></div>
-                <div class="index_block">湿度</div>
-                <div id="humidity"></div>
-                <div class="index_block">CO2</div>
-                <div id="co2"></div>
-                <div class="index_block">PM2.5</div>
-                <div id="pm25"></div>
-                <div class="index_block">光照</div>
-                <div id="light"></div>
-                <div class="index_block">电耗</div>
-                <div id="elect"></div>
+
+            <div name="showpsecond"  class="showp" style="overflow:hidden">
+                <div></div>
+                <ul class="slide-box">
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/hu.png" class="block_show_img">
+                            </div>
+                            <div id="temperature">
+                                <span>20</span>
+
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            室内温度
+                        </div>
+
+                    </li>
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/temp.png" class="block_show_img">
+                            </div>
+                            <div id="humidity">
+                                <span>20</span>
+
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            室内湿度
+                        </div>
+
+                    </li>
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/co2.png" class="block_show_img">
+                            </div>
+                            <div id="co2">
+                                <span>20</span>
+
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            二氧化碳
+                        </div>
+
+                    </li>
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/PM25.png" class="block_show_img">
+                            </div>
+                            <div id="pm25">
+                                <span>20</span>
+
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            室内PM2.5
+                        </div>
+
+                    </li>
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/out.png" class="block_show_img">
+                            </div>
+                            <div id="light">
+                                <span style="color: #ff9200">20</span>
+
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            光照强度
+                        </div>
+
+                    </li>
+                    <li class="slide-item color2">
+                        <div class="block_show">
+                            <div>
+                               <img src="../static/images/icon/elec.png" class="block_show_img">
+                            </div>
+                            <div id="elect">
+                                <span>20</span>
+               \
+                            </div>
+                        </div>
+                        <div class="block_slp_text">
+                            室内电力
+                        </div>
+
+                    </li>
+                </ul>
+
             </div>
             <div name="showpthird" class="hm_dis">
                 <div class="hm_self_f">头像
@@ -54,13 +151,13 @@
         </div>
         <div class="hm_footer">
             <div class="hm_footer_btn">
-                <div _pg="showpfirst">sssss</div>
+                <div _pg="showpfirst">控制</div>
             </div>
             <div class="hm_footer_btn">
-                <div _pg="showpsecond">sssss</div>
+                <div _pg="showpsecond">基本</div>
             </div>
             <div class="hm_footer_btn">
-                <div _pg="showpthird">sssss</div>
+                <div _pg="showpthird">我的+</div>
             </div>
         </div>
 

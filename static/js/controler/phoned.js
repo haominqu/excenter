@@ -5,7 +5,7 @@ var lamp_url = base_url + "";
 var curtain_url = base_url + "";
 var air_url = base_url + "";
 var change_pwd_url = base_url + "";
-var ctr_mac_list = base_url + "/onlinemac/controll/list/";
+var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
 var token = localStorage.getItem("token");
 $(function () {
@@ -64,7 +64,7 @@ $(function () {
         url:ctr_mac_list,
         type:'get',
         dataType:'json',
-        headers:{'Authorization':'JWT '+token},
+        headers:{'Authorization':'hm JWT '+token},
         data:{
         },
         success:function (res) {

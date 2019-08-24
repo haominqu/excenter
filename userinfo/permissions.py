@@ -14,6 +14,7 @@ from .models import UserInfo
 def login_decorator(func):
     def token_func(request, *args, **kwargs):
         token = request.META.get("HTTP_AUTHORIZATION")
+        print(token.split(' ')[1])
         if not token:
             result = False
             data = ""
