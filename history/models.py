@@ -73,8 +73,7 @@ class InviteHistory(models.Model):
         return self.invite.username
 
 
-class OpenCloseHistory(models.Model):
-    machine = models.ForeignKey(Machine, verbose_name='设备')
+class AccessHistory(models.Model):
     user = models.ForeignKey(UserInfo, verbose_name="用户")
     octime = models.DateTimeField(verbose_name="操作时间", default=timezone.now)
     detail = models.CharField(verbose_name="操作详情", max_length=50, default=0)

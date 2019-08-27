@@ -13,6 +13,7 @@ from userinfo.models import UserInfo, Guest, UserDetail
 from django.contrib.auth.hashers import check_password
 from .serializers import StaffSerializer, GuestSerializer
 from userinfo.permissions import IsAdmin, login_decorator
+from excenteron.settings import BASE_URL
 
 # base
 import logging
@@ -67,8 +68,11 @@ class AdminLogin(APIView):
             user[0].user_secret = token
             user[0].is_login = True
             user[0].save()
+            data = {}
+            data['token'] = token
+            data['avatar'] = BASE_URL+"/media/avatar/guide_manage.jpg"
             result = True
-            data = token
+            data = data
             error = ""
             return JsonResponse({"result": result, "data": data, "error": error})
 

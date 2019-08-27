@@ -9,5 +9,5 @@ admin.site.register(PMHistory)
 admin.site.register(HumidityHistory)
 admin.site.register(LigthHistory)
 admin.site.register(InviteHistory)
-admin.site.register(OpenCloseHistory)
+admin.site.register(AccessHistory)
 

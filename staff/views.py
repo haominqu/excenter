@@ -104,11 +104,12 @@ class UploadImage(APIView):
         for chunk in face_picture.chunks():
             f.write(chunk)
         f.close()
-        file_path = settings.BASE_URL+"/media/tempory_m/"+file_name
+        file_path = "/media/tempory_m/"+file_name
         result = True
         data = file_path
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
+
 
 
 class GuestManageView(APIView):
