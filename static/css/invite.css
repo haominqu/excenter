@@ -1,0 +1,45 @@
+.backindex{
+    width: 100%;
+    height: 140px;
+    background-color: #0e0047;
+    font-size: 6em;
+    color: #d7d7d7;
+}
+.backindex a{
+    color: #d7d7d7;
+}
+.invite_list{
+    width:100%;
+}
+.invite_list_it{
+    width: 90%;
+    margin-right: 5%;
+    margin-left: 5%;
+    background-color: #00003c;
+    font-size: 6em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    color: white;
+}
+.invite_list_it_o{
+    width: 30%;
+}
+.invite_list_it_s{
+
+    width: 40%;
+}
+.invite_list_it_t{
+
+    width: 30%;
+}
+
+/*add face*/
+.face_add{
+    width: 100%;
+}
+.face_add label img{
+    width: 30%;
+}

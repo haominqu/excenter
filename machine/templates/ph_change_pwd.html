@@ -4,29 +4,31 @@
        <meta charset="utf-8">
        <script src="../static/js/common/jquery-1.9.1.min.js"></script>
        <script src="../static/js/controler/phchpwd.js"></script>
-       <link rel="stylesheet" type="text/css" href="../static/css/phone.css">
+       <link rel="stylesheet" type="text/css" href="../static/css/reset.css">
+       <link rel="stylesheet" type="text/css" href="../static/css/phonepwd.css">
     </head>
-    <body>192.168.2.109
-        <a href="/phoned/">back</a>
-        <div>
+    <body>
+        <div class="backindex">
+            <a href="/phoned/">back</a>
+
+        </div>
+
+        <div class="hm_ch_pwd">
             <div>
-                <span>旧密码：</span>
-                <span><input type="password" name="oldpwd"></span>
-                <span name="oldpwderr" style="color: darkred"></span>
+                <span><input type="password" name="oldpwd" placeholder="旧密码" class="hm_ch_pwd_inp"></span>
+                <span name="oldpwderr" style="font-size:4em;color: darkred"></span>
             </div>
             <div>
-                <span>新密码：</span>
-                <span><input type="password" name="newpwd"></span>
-                <span name="newpwderr" style="color: darkred"></span>
+                <span><input type="password" name="newpwd" placeholder="新密码" class="hm_ch_pwd_inp"></span>
+                <span name="newpwderr" style="font-size:4em;color: darkred"></span>
             </div>
             <div>
-                <span>确认密码：</span>
-                <span><input type="password" name="cnewpwd"></span>
-                <span name="cnewpwderr" style="color: darkred"></span>
+                <span><input type="password" name="cnewpwd" placeholder="确认密码" class="hm_ch_pwd_inp"></span>
+                <span name="cnewpwderr" style="font-size:4em;color: darkred"></span>
             </div>
             <div>
 
-                <span><input type="button" name="cpwd_btn" value="提交"></span>
+                <span><input type="button" name="cpwd_btn" class="hm_ch_pwd_btn" value="确定"></span>
 
             </div>
         </div>

@@ -144,7 +144,7 @@ STATICFILES_DIRS = (
         os.path.join(BASE_DIR,'static'),
 )
 
-BASE_URL = 'http://192.168.221.170:8003'
+BASE_URL = 'http://localhost:8000'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
 MEDIA_URL = '/media/'

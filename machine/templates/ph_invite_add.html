@@ -5,10 +5,20 @@
         <script src="../static/js/common/jquery-1.9.1.min.js"></script>
         <script src="../static/js/common/lrz.bundle.js"></script>
         <script src="../static/js/controler/phinvite.js"></script>
-        <link rel="stylesheet" type="text/css" href="../static/css/phone.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/invite.css">
     </head>
     <body>
-        <input type="file" capture="camera" accept="image/*" name="logo" id="file">
+        <div class="face_add">
+            <label for="file-input">
+                <img src="../static/images/icon/upload.png"/>
+            </label>
+            <input type="file" capture="camera" accept="image/*" name="logo" id="file-input" style="display: none;">
+            <div>
+                点击上传
+            </div>
+        </div>
+
         <img src="" name="face_picture" >
         <input type="text" name="" value="">
         <input type="text" name="" value="">
