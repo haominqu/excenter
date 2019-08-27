@@ -30,12 +30,44 @@ class UseHistoryView(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
+class InviteHistoryView(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+
+    def get(self, request, *args, **kwargs):
+        history = InviteHistory.objects.all()
+        history_se = InviteHistorySerializer(history, many=True)
+        result = True
+        data = history_se.data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class OpenCloseHistoryView(APIView):
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
+
+    def get(self, request, *args, **kwargs):
+        history = OpenCloseHistory.objects.all()
+        history_se = OpenCloseHistorySerializer(history, many=True)
+        result = True
+        data = history_se.data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
 class TemperatureHistoryView(APIView):
-    # permission_classes = (
-    #     IsAdmin,
-    # )
-    #
-    # @method_decorator(login_decorator)
+    permission_classes = (
+        IsAdmin,
+    )
+
+    @method_decorator(login_decorator)
     def get(self, request, *args, **kwargs):
         history = TemperatureHistory.objects.all()
         history_se = TemperatureHistorySerializer(history, many=True)
