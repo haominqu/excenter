@@ -1,9 +1,34 @@
 // base_url="http://192.168.221.170:8003";
 base_url="http://192.168.188.171:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
+var invite_add_url = base_url + "/staff/guest/manage/";
+var invite_image_url = base_url + "/staff/upload/image/";
 var token = localStorage.getItem("token");
 
 $(function () {
+
+    $("#file-input").on("change",function(){
+        var form_data = new FormData();
+        form_data.append('myfiles', this.files[0]);
+       $.ajax({
+             url: invite_image_url,
+             type: 'POST',
+             data:form_data,
+             timeout: 200000,
+             headers:{'Authorization':'hm JWT '+token},
+             processData: false,
+             contentType: false,
+             error:function (err) {
+                 console.log(err);
+             },
+             success:function (res) {
+                $("#face_picture").val(res.data);
+                $("img[name='face_picture']").attr("src",res.data);
+
+             },
+        });
+    });
+
     $.ajax({
         url:invite_list_url,
         type:'get',
@@ -14,18 +39,92 @@ $(function () {
         success:function (res) {
             console.log(res);
             var datas = res.data;
+            var apdom = $("#invite_list");
             datas.forEach(v=>{
-                console.log(v);
+                var initemf = "<div class=\"invite_list_it\"><span class=\"invite_list_it_o\">"+v.realname+"</span><span class=\"invite_list_it_s\">"+v.department+"</span>";
+                var initems = "";
+                if(v.audit_status==0){
+                    initems="<span class=\"invite_list_it_t\">未审核</span></div>"
+                }else if(v.audit_status==1){
+                    initems="<span class=\"invite_list_it_t\">通过</span></div>"
+                }else{
+                    initems="<span class=\"invite_list_it_t\">未通过</span></div>"
+                }
+                apdom.append(initemf+initems);
             });
         },
         error:function () {
 
         }
+    });
+
+
+    $("#subinvite").on("click",function () {
+        var user_name = $("#user_name").val();
+        var real_name = $("#real_name").val();
+        var position = $("#position").val();
+        var department = $("#department").val();
+        var face_picture = $("#face_picture").val();
+        if(user_name!=""&&real_name!=""&&position!=""&&department!=""&&face_picture!=""){
+            $.ajax({
+                url:invite_add_url,
+                type:'post',
+                dataType:'json',
+                headers:{'Authorization':'hm JWT '+token},
+                data:{
+                    user_name:user_name,
+                    real_name:real_name,
+                    position:position,
+                    department:department,
+                    face_picture:face_picture,
+                },
+                success:function (res) {
+                    if(res.result==true){
+                        location.href="/invite/";
+                    }
+
+                },
+                error:function () {
+
+                }
+            })
+        }
+
     })
 
 
+});
 
-
-
-
-})
+//
+// <script>
+//         $(function(){
+//  $('input[name=logo]').on('change', function(){
+//    //lrz(this.files[0], {width: 640})
+//    //.then(function (rst) {
+//         var form_data = new FormData();
+//         form_data.append('myfiles', this.files[0]);
+//        $.ajax({
+//              url: 'http://localhost:8000/staff/upload/image/',
+//              type: 'POST',
+//              data:form_data,
+//              timeout: 200000,
+//              processData: false,
+//              contentType: false,
+//              error:function (err) {
+//                  console.log(err);
+//              },
+//              success:function (res) {
+//                 $("img[name='face_picture']").attr("src",res.data);
+//              },
+//         });
+//
+//   // })
+//   // .catch(function (err) {
+// //
+//   // })
+//   //.always(function () {
+//
+//   // });
+//  });
+// });
+//     </script>
