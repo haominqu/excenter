@@ -9,36 +9,29 @@
     </head>
     <body>
         <div class="index_top">
-            <span> 达内科技</span>
+            <span class="index_top_span_1"> 达</span>
+            <span style="width: 45%"></span>
+            <span class="index_top_span_2">AAAAA</span>
         </div>
-        <div class="index_topl">
-            <span> 北京 </span>
-            <span>
-                <img src="../static/images/weather/weathy_01.png" class="weatherimg">
-                <span class="weathertext">Sunny 15C</span>
-            </span>
-        </div>
-        <div style="width: 84%;margin-left: 8%;border-top: rgba(110,118,122,0.34) 3px solid;float: left"></div>
+
+
+
         <div class="hm_totle">
             <div name="showpfirst"  class="hm_dis">
+
                 <div class="hm_ctr_tol">
-                    <div class="hm_ctr_block">
-                        <div>灯</div>
-                        <div _mid="1"><img src="../static/images/icon/lamp.png"></div>
 
-{#                            <input type="button" name="ctr_btn" _mid="1" onclick="ctr_mac(1,1)" value="开">#}
-                            <div class="switch">
-                                <input type="checkbox" onclick="ctr_mac(1,1)"  id="control" class="control">
-                                <label for="control" class="checkbox"></label>
-                            </div>
-
-                    </div>
                 </div>
 
             </div>
 
             <div name="showpsecond"  class="showp" style="overflow:hidden">
-                <div></div>
+                <div class="showp_one">
+                    <img src="../static/images/icon/banner10.png"/>
+                </div>
+                <div>
+                    sas
+                </div>
                 <ul class="slide-box">
                     <li class="slide-item color2">
                         <div class="block_show">
@@ -122,7 +115,7 @@
                             </div>
                             <div id="elect">
                                 <span>20</span>
-               \
+               
                             </div>
                         </div>
                         <div class="block_slp_text">
@@ -133,31 +126,49 @@
                 </ul>
 
             </div>
+
             <div name="showpthird" class="hm_dis">
-                <div class="hm_self_f">头像
-                    名字公司
+                <div class="hm_self_f">
+                    <div class="hm_self_f_left">
+                        <img src="../static/images/icon/face_normal.jpeg">
+                    </div>
+                    <div class="hm_self_f_right">
+                        <span class="block_fi" name="realname">小明同学</span>
+                        <span class="block_se" name="position">达内研究院</span>
+                    </div>
                 </div>
                 <div class="hm_self_c" name="ch_pwd">
-                    更改密码
+                    <span>更改密码</span>
                 </div>
                 <div class="hm_self_c" name="invite">
-                    邀请记录
+                    <span>邀请记录</span>
+
                 </div>
                 <div class="hm_self_c logout">
-                    出注销
+                    注销
                 </div>
 
             </div>
         </div>
+        <div style="width: 100%;height: 190px;"></div>
         <div class="hm_footer">
             <div class="hm_footer_btn">
-                <div _pg="showpfirst">控制</div>
+                <div _pg="showpfirst">
+                    <span><img src="../static/images/icon/foot_ctol.png"></span>
+                    <span>控制</span>
+                </div>
             </div>
             <div class="hm_footer_btn">
-                <div _pg="showpsecond">基本</div>
+                <div _pg="showpsecond">
+                    <span><img src="../static/images/icon/foot_index.png"></span>
+                    <span>基本</span>
+                </div>
             </div>
             <div class="hm_footer_btn">
-                <div _pg="showpthird">我的+</div>
+                <div _pg="showpthird">
+                    <span><img src="../static/images/icon/foot_self.png"></span>
+                    <span>我的</span>
+                </div>
             </div>
         </div>
 
