@@ -71,9 +71,9 @@ def send_socket(message):
 
 
 class StaffGuestLogin(APIView):
-    permission_classes = (
-        IsStaffGuest,
-    )
+    # permission_classes = (
+    #     IsStaffGuest,
+    # )
 
     def post(self, request):
         """

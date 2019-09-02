@@ -5,9 +5,25 @@ import hmmqtt
 import json
 from userinfo.views import *
 # Create your views here.
-
-
+import time
+a={}
+b={}
+b["32DCD418004B1200"]=123
+i=0
 class ReciveMessage:
+
+    def ac(self,arg,argc,argsql):
+
+        if argc in b.keys():
+            print("@@@##$%%^^&&")
+            if a[argc] != b[argc]:
+                b[argc] = a[argc]
+            else:
+                argsql.update(mac_status=0)
+                for m in arg:
+                    hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
+        else:
+            b[argc] = 123
 
     def readmessage(self, client, userdata, message):
         # message.topic
@@ -65,6 +81,7 @@ class ReciveMessage:
                         macs.update(mac_status=1)
                         for m in macs:
                             hmmqtt.mqttctlapi.LampAPI().lamp_on(m.mac.id)
+
                     else:
 
                         # 次感应器状态回复
@@ -73,12 +90,26 @@ class ReciveMessage:
                         n_mac = ControlMac.objects.filter(mac__scene=macv[0].scene, mac__mac_ctype=0, mac_status=1)
 
                         if not n_mac:
-                            macs.update(mac_status=0)
-                            for m in macs:
-
-                                hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
 
 
+                            # if a['aa'] != b['aa']:
+                            #     print("*****cs")
+                            #     b['aa'] = a['aa']
+                            from threading import Timer
+                            t = Timer(10, self.ac,[macs,devID,macs])
+
+                            t.start()
+                            # else:
+                            #     for m in macs:
+                            #         hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
+                            #     print("*****")
+
+                            print("$$$$$$$$$$$$$$$", a['aa'])
+                            print("$$$$$$$$$$$$$$$", b['aa'])
+
+
+                            # for m in macs:
+                            #     hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
 
         elif topical == "alarm":
             if mac_mode.mac_mode == 2:
@@ -117,17 +148,19 @@ class ReciveMessage:
                         macs.update(mac_status=1)
                         for m in macs:
                             hmmqtt.mqttctlapi.LampAPI().lamp_on(m.mac.id)
+
+                            a[devID]=msg['timestamp']
                     else:
-                        print("@@@@@@@@@@@@!!!!!!!!!")
+                        # print("@@@@@@@@@@@@!!!!!!!!!")
                         # 次感应器状态回复
                         ControlMac.objects.filter(mac_id=macv[0].id).update(mac_status=0)
                         # 查看其他感应器
                         n_mac = ControlMac.objects.filter(mac__scene=macv[0].scene, mac__mac_ctype=0, mac_status=1)
-                        print("@@@@@@@@@@@@@@",len(n_mac))
+                        print("@@@@@@@@@@@@@@$$$$$$$$$$$$$")
                         if not n_mac:
                             macs.update(mac_status=0)
                             for m in macs:
-                                print('@@', m.mac.id)
+                                # print('@@', m.mac.id)
                                 hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
 
         return True
