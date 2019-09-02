@@ -9,24 +9,73 @@
         <link rel="stylesheet" type="text/css" href="../static/css/invite.css">
     </head>
     <body>
-        <div class="face_add">
-            <label for="file-input">
-                <img src="../static/images/icon/upload.png"/>
-            </label>
-            <input type="file" capture="camera" accept="image/*" name="logo" id="file-input" style="display: none;">
+        <div class="backindex">
+            <a href="/phoned/">back</a>
+        </div>
+        <div class="hm_invite_add">
             <div>
-                点击上传
+                <span>
+                    <input type="text" id="user_name" value="" placeholder="手机号" class="hm_invite_add_inp">
+                </span>
+                <span name="oldpwderr" style="font-size:4em;color: darkred"></span>
+            </div>
+            <div>
+                <span>
+                    <input type="text" id="real_name" value="" placeholder="姓名" class="hm_invite_add_inp">
+                </span>
+                <span name="newpwderr" style="font-size:4em;color: darkred"></span>
+            </div>
+            <div>
+                <span>
+                    <input type="text" id="position" value="" placeholder="职位" class="hm_invite_add_inp">
+                </span>
+                <span name="cnewpwderr" style="font-size:4em;color: darkred"></span>
+            </div>
+            <div>
+                <span>
+                    <input type="text" id="department" value="" placeholder="公司" class="hm_invite_add_inp">
+                </span>
+                <span name="cnewpwderr" style="font-size:4em;color: darkred"></span>
+            </div>
+            <div>
+                <div class="face_add">
+                    <label for="file-input">
+                        <img  name="face_picture"  src="../static/images/icon/upload.png"/>
+                    </label>
+                    <input type="file" capture="camera" accept="image/*,video/*" name="logo" id="file-input" style="display: none;">
+                    <div style="color: white;font-size: 6em">
+                        点击上传
+                    </div>
+                </div>
+
+            </div>
+            <div>
+                <input type="hidden" id="face_picture" value="">
+                <span>
+                    <input type="button" name=""  id="subinvite" class="hm_invite_add_btn" value="确定">
+                </span>
+
             </div>
         </div>
 
-        <img src="" name="face_picture" >
 
-        <input type="text" id="user_name" value="">
-        <input type="text" id="real_name" value="">
-        <input type="text" id="position" value="">
-        <input type="text" id="department" value="">
-        <input type="hidden" id="face_picture" value="">
-        <input type="button" name="" value="tijiao" id="subinvite">
+
+
+
+{#        <input type="text" id="user_name" value="" placeholder="手机号" class="hm_invite_add_inp">#}
+{#        <input type="text" id="real_name" value="" placeholder="姓名" class="hm_invite_add_inp">#}
+{#        <input type="text" id="position" value="" placeholder="职位" class="hm_invite_add_inp">#}
+{#        <input type="text" id="department" value="" placeholder="公司" class="hm_invite_add_inp">#}
+{##}
+{#        <input type="button" name=""  id="subinvite" class="hm_invite_add_btn" value="确定">#}
+
+
+
+
+
+
+
+
 
 
     </body>
