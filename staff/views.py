@@ -20,6 +20,7 @@ import logging
 import time
 import os
 import shutil
+import socket
 
 # Create your views here.
 
@@ -86,9 +87,9 @@ class StaffInfo(APIView):
 
 
 class UploadImage(APIView):
-    # permission_classes = (
-    #     IsStaff,
-    # )
+    permission_classes = (
+        IsStaff,
+    )
     """
     desc:手机端,业务人员添加来宾人脸图
     """
@@ -103,7 +104,9 @@ class UploadImage(APIView):
         for chunk in face_picture.chunks():
             f.write(chunk)
         f.close()
-        file_path = "/media/tempory_m/"+file_name
+        myname = socket.gethostname()
+        myaddr = socket.gethostbyname(myname)
+        file_path = "http://" + myaddr + ":8003" + "/media/tempory_m/"+file_name
         result = True
         data = file_path
         error = ""
@@ -130,6 +133,7 @@ class GuestManageView(APIView):
         position = request.POST.get("position", "")  # 职位(允许为空)
         department = request.POST.get("department", "")  # 公司(允许为空)
         face_picture = request.POST.get("face_picture", "")
+        print(user_name, real_name, position, department, face_picture)
         if user_name == "" or real_name == "" or face_picture == "":
             result = False
             data = ""
