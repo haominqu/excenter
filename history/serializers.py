@@ -33,12 +33,7 @@ class InviteHistorySerializer(serializers.ModelSerializer):
         fields = ('invite', 'user', 'invitetime')
 
 
-class OpenCloseHistorySerializer(serializers.ModelSerializer):
-
-    machine = serializers.SerializerMethodField('machine_field')
-
-    def machine_field(self, obj):
-        return obj.machine.mac_name
+class AccessHistorySerializer(serializers.ModelSerializer):
 
     user = serializers.SerializerMethodField('user_field')
 
@@ -48,8 +43,8 @@ class OpenCloseHistorySerializer(serializers.ModelSerializer):
         return user[0].realname
 
     class Meta:
-        model = OpenCloseHistory
-        fields = ('machine', 'user', 'octime', 'detail')
+        model = AccessHistory
+        fields = ('user', 'octime', 'detail')
 
 
 class TemperatureHistorySerializer(serializers.ModelSerializer):

@@ -46,7 +46,7 @@ class InviteHistoryView(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
-class OpenCloseHistoryView(APIView):
+class AccessHistoryView(APIView):
     permission_classes = (
         IsAdmin,
     )
@@ -54,8 +54,8 @@ class OpenCloseHistoryView(APIView):
     @method_decorator(login_decorator)
 
     def get(self, request, *args, **kwargs):
-        history = OpenCloseHistory.objects.all()
-        history_se = OpenCloseHistorySerializer(history, many=True)
+        history = AccessHistory.objects.all()
+        history_se = AccessHistorySerializer(history, many=True)
         result = True
         data = history_se.data
         error = ""
