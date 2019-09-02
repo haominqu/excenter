@@ -44,6 +44,7 @@ class ControllMachineM(APIView):
         :return:
         """
         control_mac = ControlMac.objects.filter(mac__mac_ctype=1)
+        print("@@@@", control_mac)
         machine_se = ControlMacSerializer(control_mac, many=True)
         machine_data = machine_se.data
         result = True
@@ -194,3 +195,32 @@ class MachineActive(APIView):
         data = ""
         error = "状态更改成功"
         return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class MacModeView(APIView):
+
+    def get(self, request):
+        mac = MacSetting.objects.first()
+        mode = mac.mac_mode
+        result = True
+        data = mode
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+    def put(self, request):
+        mode = request.data.get("mac_mode", "")
+        if mode == "":
+            result = False
+            data = ""
+            error = "信息不能为空"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        mac = MacSetting.objects.first()
+        mac.mac_mode = mode
+        mac.save()
+        result = True
+        data = ""
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+

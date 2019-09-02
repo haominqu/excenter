@@ -14,7 +14,7 @@ from .models import UserInfo
 def login_decorator(func):
     def token_func(request, *args, **kwargs):
         token = request.META.get("HTTP_AUTHORIZATION")
-        print(token.split(' ')[1])
+        print("@@",token.split(' ')[2])
         if not token:
             result = False
             data = ""
@@ -28,8 +28,11 @@ def login_decorator(func):
             error = "身份已经过期，请重新登入"
             return JsonResponse({"result": result, "data": data, "error": error})
         else:
+            print("@@")
             kwargs['token'] = front_token
+            print("###")
             return func(request, *args, **kwargs)
+
     return token_func
 
 

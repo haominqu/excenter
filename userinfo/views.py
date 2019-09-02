@@ -114,7 +114,7 @@ class StaffGuestLogin(APIView):
                 real_name = staff[0].realname
                 position = staff[0].position
                 department = staff[0].department
-                user_id = guest[0].id
+                user_id = staff[0].id
             elif user[0].role == int(3):
                 guest = Guest.objects.filter(user_id=user[0].id)
                 real_name = guest[0].realname

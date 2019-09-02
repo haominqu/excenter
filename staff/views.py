@@ -94,9 +94,8 @@ class UploadImage(APIView):
     """
 
     @method_decorator(login_decorator)
-    def post(self, request):
+    def post(self, request, **kwargs):
         face_picture = request.FILES.get('myfiles', '')
-        print("###", type(face_picture))
         file_type = face_picture.name.split('.')[1]
         time_stamp = int(round(time.time() * 1000))
         file_name = str(time_stamp) + '.' + file_type
@@ -124,7 +123,7 @@ class GuestManageView(APIView):
         :param request:
         :return:
         """
-        token = kwargs['tokem']
+        token = kwargs['token']
         staff_id = token['user_id']
         user_name = request.POST.get("user_name", "")  # 手机号
         real_name = request.POST.get("real_name", "")
@@ -165,7 +164,7 @@ class GuestManageView(APIView):
             user_info.delete()
         guest = Guest()
         guest.user = user_info
-        guest.invite = staff
+        guest.invite = staff[0]
         guest.realname = real_name
         face_file_name = face_picture.split('/')[-1]
         fixed_file_path = "/media/face_info/guest/"
