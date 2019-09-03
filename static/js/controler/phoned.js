@@ -7,6 +7,7 @@ var air_url = base_url + "";
 var change_pwd_url = base_url + "";
 var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
+var ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
 
 
@@ -25,28 +26,34 @@ $(function () {
         socket.onmessage = function (e) {
             var bdata = $.parseJSON(e.data);
             if(bdata.mac_type==1){
-                console.log(bdata);
+                console.log("####",bdata);
 
                 $("input[_mid='"+bdata.mac_id+"']").attr("disabled",false);
                 if(bdata.mac_st==1){
 
                    $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp2.png");
                    $("input[_mid='"+bdata.mac_id+"']").val("关");
+                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
                    $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_mac(0,'+bdata.mac_id+')');
                 }else {
                    $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp.png");
 
                    $("input[_mid='"+bdata.mac_id+"']").val("开");
+                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
+
                    $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_mac(1,'+bdata.mac_id+')');
                 };
             }else if(bdata.mac_type==2){
                 // 光感
                 if(bdata.mac_sty=='19'){
                     console.log(bdata.mac_st);
-                    $('#light').append("<span style=\"color: #ff9200\">"+bdata.mac_st+"</span>");
+                    $('#light').text(bdata.mac_st);
                 }else{
                     console.log("a");
                 }
+
+
+
             }
 
 
@@ -71,7 +78,7 @@ $(function () {
                 $('.hm_totle div[name=\''+now_c+'\']').siblings().css("display","none");
                 on_c = $(this).attr("_pg");
             }
-            console.log(now_c);
+
             if(now_c=="showpfirst"){
 
                 $(this).children("span").children("img").attr("src","../static/images/icon/eye-fill.png");
@@ -101,16 +108,19 @@ $(function () {
 
         });
 
+
+
         //获取可控设备列表
         $.ajax({
             url:ctr_mac_list,
             type:'get',
             dataType:'json',
             headers:{'Authorization':'hm JWT '+token},
+            async:false,
             data:{
             },
             success:function (res) {
-                console.log(res);
+                // console.log("!!!res");
                 var data = res.data;
                 var showt = "";
                 for(let index in data) {
@@ -118,9 +128,9 @@ $(function () {
                     var showit1 = "<div class=\"hm_ctr_block\"><div>"+data[index].mac.mac_name+"</div>";
                     var showit2 = "";
                     if(data[index].mac_status==0){
-                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\"  id=\"control\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                     }else {
-                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\"  id=\"control\" class=\"control\" checked><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                     }
 
 
@@ -139,8 +149,34 @@ $(function () {
             error:function (error) {
 
             }
-        })
+        });
+// 获取自动手动
+         $.ajax({
+            url:ctr_mac_atmt,
+            type:'get',
+            dataType:'json',
+            headers:{'Authorization':'hm JWT '+token},
+            data:{
+            },
+            success:function (res) {
+                // console.log("***res");
+                if(res.data==1){
 
+                    $("#atmt").text("自动");
+                    $("#atmt").attr("_atmt","at");
+                    $(".control").attr("disabled",true);
+
+                }else {
+                    $("#atmt").text("手动");
+                    $("#atmt").attr("_atmt","mt");
+                    $(".control").attr("disabled",false);
+
+                };
+                },
+            error:function (error) {
+
+            }
+        });
 
         // 自动手动
         $("#atmt").on("click",function () {
@@ -159,7 +195,7 @@ $(function () {
 
         // 跳转
         $("div[name='ch_pwd']").on('click',function () {
-            console.log("s");
+            // console.log("s");
             location.href="/phchpwd/";
         });
         $("div[name='invite']").on('click',function () {

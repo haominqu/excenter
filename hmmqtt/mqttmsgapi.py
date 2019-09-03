@@ -110,7 +110,6 @@ class ReciveMessage:
 
                             # for m in macs:
                             #     hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
-
         elif topical == "alarm":
             if mac_mode.mac_mode == 2:
                 mac_detail = json.loads(msg['msgContent'])

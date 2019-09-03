@@ -32,9 +32,11 @@ allconn = defaultdict(list)
 
 
 def send_web_msg(user_id,msg):
+    print(allconn)
     for i in allconn:
-        if i != user_id:
-            allconn[i].send(msg)
+        # if i != user_id:
+        print("$$$$",i)
+        allconn[i].send(msg)
     return True
 
 @accept_websocket
@@ -50,6 +52,7 @@ def build_socket(request, user_id):
     # 判断是不是websocket连接
     if request.is_websocket():
         # 将链接(请求？)存入全局字典中
+        print("user",user_id)
         allconn[str(user_id)] = request.websocket
         for message in request.websocket:
             if message == "1111":
@@ -114,16 +117,16 @@ class StaffGuestLogin(APIView):
                 real_name = staff[0].realname
                 position = staff[0].position
                 department = staff[0].department
-                user_id = staff[0].id
+                # user_id = staff[0].id
             elif user[0].role == int(3):
                 guest = Guest.objects.filter(user_id=user[0].id)
                 real_name = guest[0].realname
                 position = guest[0].position
                 department = guest[0].department
-                user_id = guest[0].id
+                # user_id = guest[0].id
             data = dict()
             data['token'] = token
-            data['user_id'] = user_id
+            data['user_id'] = user[0].id
             data['role_name'] = real_name
             data['position'] = position
             data['department'] = department
