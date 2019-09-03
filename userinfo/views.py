@@ -71,9 +71,6 @@ def send_socket(message):
 
 
 class StaffGuestLogin(APIView):
-    permission_classes = (
-        IsStaffGuest,
-    )
 
     def post(self, request):
         """
@@ -100,6 +97,12 @@ class StaffGuestLogin(APIView):
             data = ""
             error = "用户名密码不正确"
             return JsonResponse({"result": result, "data": data, "error": error})
+        if user[0].is_active != int(1):
+            result = False
+            data = ""
+            error = "用户未激活"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        # if user[0].role != int(2) or
         if user:
             jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
             jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -114,16 +117,15 @@ class StaffGuestLogin(APIView):
                 real_name = staff[0].realname
                 position = staff[0].position
                 department = staff[0].department
-                user_id = staff[0].id
             elif user[0].role == int(3):
                 guest = Guest.objects.filter(user_id=user[0].id)
                 real_name = guest[0].realname
                 position = guest[0].position
                 department = guest[0].department
-                user_id = guest[0].id
             data = dict()
             data['token'] = token
-            data['user_id'] = user_id
+            data['role'] = user[0].role
+            data['user_id'] = user[0].id
             data['role_name'] = real_name
             data['position'] = position
             data['department'] = department
@@ -136,10 +138,10 @@ class StaffGuestLogin(APIView):
 class StaffGuestLogout(APIView):
 
     permission_classes = (
-        IsStaff,
-        IsGuest,
+        IsStaffGuest,
     )
 
+    @method_decorator(login_decorator)
     def post(self, requset, **kwargs):
         """
         desc:手机端注销, token过期, 断开websocket
