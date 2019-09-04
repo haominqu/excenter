@@ -23,6 +23,7 @@ from .models import *
 # base
 import logging
 import json
+import socket
 
 # Create your views here.
 
@@ -117,11 +118,13 @@ class StaffGuestLogin(APIView):
                 real_name = staff[0].realname
                 position = staff[0].position
                 department = staff[0].department
+                face_picture = staff[0].face_picture
             elif user[0].role == int(3):
                 guest = Guest.objects.filter(user_id=user[0].id)
                 real_name = guest[0].realname
                 position = guest[0].position
                 department = guest[0].department
+                face_picture = guest[0].face_picture
             data = dict()
             data['token'] = token
             data['role'] = user[0].role
@@ -129,6 +132,9 @@ class StaffGuestLogin(APIView):
             data['role_name'] = real_name
             data['position'] = position
             data['department'] = department
+            myname = socket.gethostname()
+            myaddr = socket.gethostbyname(myname)
+            data['face_picture'] = "http://" + myaddr + ":8003" + "/media" + str(face_picture)
             result = True
             data = data
             error = ""

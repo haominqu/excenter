@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+    <head>
+        <meta charset="utf-8">
+        <script src="../static/js/common/jquery-1.9.1.min.js"></script>
+        <script src="../static/js/common/lrz.bundle.js"></script>
+        <script src="../static/js/controler/phinvite.js"></script>
+        <link rel="stylesheet" type="text/css" href="../static/css/reset.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/invite.css">
+    </head>
+    <body>
+        <div class="backindex">
+            <a href="/invite/">
+                <img src="../static/images/icon/back.png" class="back-icon"/>
+            </a>
+        </div>
+        <div class="guest_info">
+            <div class="databox">
+                <div class="databox-left">
+                    <img src="../static/images/icon/mobile.png" class="mobile-icon"/>
+                    <div class="databox-left-et">Mobile</div>
+                </div>
+                <div class="databox-right">
+                    <input type="text" name="user_name" id="user_name" class="text-input" placeholder="手机号">
+                    <span name="mobilewderr" class="mobilewderr" style="font-size:3em;color: #ff9b79d1"></span>
+
+                </div>
+            </div>
+            <div class="databox">
+                <div class="databox-left">
+                    <img src="../static/images/icon/realname.png" class="realname-icon"/>
+                    <div class="databox-left-et">Name</div>
+                </div>
+                <div class="databox-right">
+                    <input type="text" name="real_name" id="real_name" class="text-input" placeholder="姓名">
+                </div>
+            </div>
+            <div class="databox">
+                <div class="databox-left">
+                     <img src="../static/images/icon/position.png" class="position-icon"/>
+                    <div class="databox-left-et">Position</div>
+                </div>
+                <div class="databox-right">
+                    <input type="text" name="position" id="position" class="text-input" placeholder="职位">
+                </div>
+            </div>
+            <div class="databox">
+                <div class="databox-left">
+                    <img src="../static/images/icon/deparment.png" class="deparment-icon"/>
+                    <div class="databox-left-et">Department</div>
+                </div>
+                <div class="databox-right">
+                    <input type="text" name="department" id="department" class="text-input" placeholder="公司">
+                </div>
+            </div>
+            <div class="databox">
+                <div class="databox-left">
+                    <img src="../static/images/icon/face.png" class="face-icon"/>
+                    <div class="databox-left-et">Face Picture</div>
+                </div>
+                <div>
+                    <span name="facewderr" class="facewderr" style="font-size:3em;color: #ff9b79d1"></span>
+                </div>
+                <div class="databox-right">
+                    <label for="file-input">
+                        <img src="../static/images/icon/shangchuan.png" name="face_picture" id="face_picture" class="face-img"/>
+                    </label>
+                    <input type="file" capture="camera" accept="image/*,video/*" name="logo" id="file-input" style="display: none;">
+                </div>
+            </div>
+
+            <!--<div class="face_add">
+            <label for="file-input">
+                <img src="../static/images/icon/KHCFDC.png" name="face_picture"/>
+            </label>
+            <input type="file" capture="camera" accept="image/*" name="logo" id="file-input" style="display: none;">
+            <div>
+                点击上传
+            </div>-->
+        </div>
+            <div class="invite-err">
+                <span name="invitewderr" class="invitewderr" style="font-size:3em;color: #ff9b79d1"></span>
+            </div>
+
+            <div class="subinvite" id="subinvite">
+                <div>
+                    <span>提交资料</span>
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>

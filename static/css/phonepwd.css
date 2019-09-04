@@ -1,17 +1,24 @@
+body{
+    background:url("../images/icon/yqbj.png");
+    padding-top:10%;
+}
 .backindex{
     width: 100%;
     height: 140px;
-    background-color: #0e0047;
     font-size: 6em;
     color: #d7d7d7;
+}
+.backindex img{
+    width: 7%;
+    margin-left: 5%;
 }
 .backindex a{
     color: #d7d7d7;
 }
 .hm_ch_pwd{
-    width: 100%;
+    width: 95%;
     text-align: center;
-
+    margin-top: 12%;
 }
 .hm_ch_pwd span{
     display: block;
@@ -33,21 +40,23 @@
     border-top-color: rgba(220,9,20,0);
     border-left-color: rgba(220,9,20,0);
     border-right-color: rgba(220,9,20,0);
-    border-bottom-color: #132adc;
+    border-bottom-color: #ff9b79e3;
 }
 .hm_ch_pwd_btn{
     display:block;
     width:80%;
-    margin-left:10%;
-    margin-top:50px;
+    margin-left:12%;
+    margin-top:134px;
     margin-bottom:50px;
     padding-left: 0.5em;
     padding-right:0.5em;
     padding-top:0.5em;
     padding-bottom:0.5em;
     font-size: 3em;
-    background-color: rgba(220,9,20,0);
     font-weight: 800;
-    color: #6b7178;
+    border-radius: 2.5em;
+    background-color: rgba(220,9,20,0);
+    border: #ff9b79e3 2px solid;
+    color: #ff9b79e3;
 
 }

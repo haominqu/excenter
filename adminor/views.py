@@ -10,10 +10,11 @@ from django.conf import settings
 
 # self_project
 from userinfo.models import UserInfo, Guest, UserDetail
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password, make_password
 from .serializers import StaffSerializer, GuestSerializer
 from userinfo.permissions import IsAdmin, login_decorator
 from excenteron.settings import BASE_URL
+from machine.models import *
 
 # base
 import logging
@@ -22,6 +23,33 @@ import os
 import shutil
 
 # Create your views here.
+
+class IndexView(APIView):
+    def get(self, request):
+        """
+        desc:首页数据展示
+        :param request:
+        :return:
+        """
+        machines = Machine.objects.filter(mac_ctype=2)
+        mac_list = []
+        for machine in machines:
+            data = {}
+            con_mac = ControlMac.objects.filter(mac=machine)
+            if not con_mac:
+                result = False
+                data = ""
+                error = ""
+                return JsonResponse({"result": result, "data": data, "error": error})
+            data["mac"] = machine.mac_name
+            data["kind"] = machine.kind
+            data["sta"] = con_mac[0].temperature
+            mac_list.append(data)
+        result = True
+        data = mac_list
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
 
 class AdminLogin(APIView):
 
@@ -135,7 +163,8 @@ class StaffManageView(APIView):
             return JsonResponse({"result": result, "data": data, "error": error})
         user_info = UserInfo()
         user_info.username = user_name
-        user_info.password = user_name[-4: ]
+        password = make_password(user_name[-4: ], None, 'pbkdf2_sha256')
+        user_info.password = password
         user_info.role = 2
         try:
             user_info.save()

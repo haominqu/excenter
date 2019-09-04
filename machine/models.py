@@ -30,6 +30,15 @@ STATUS_CHOICES = (
     (2, '已停用'),
     (3, '检修中'),
 )
+MAC_KIND = (
+    (0, '可控'),
+    (1, '感应'),
+    (2, '温度'),
+    (3, '湿度'),
+    (4, '光照'),
+    (5, 'CO2'),
+    (6, '电力'),
+)
 # Create your models here.
 
 
@@ -59,6 +68,7 @@ class Machine(models.Model):
     mac_ctype = models.IntegerField(verbose_name='设备属性', choices=SCE_TYPE_CHOICES, default=0)
     is_active = models.IntegerField(verbose_name='激活状态', choices=ACTIVE_CHOICES, default=1)
     status = models.IntegerField(verbose_name='设备状态', choices=STATUS_CHOICES, default=1)
+    kind = models.IntegerField(verbose_name='设备种类', choices=MAC_KIND, default=0)
 
 
     def __str__(self):
@@ -69,7 +79,7 @@ class ControlMac(models.Model):
     mac = models.OneToOneField(Machine,verbose_name='设备')
     endpointnum = models.IntegerField(verbose_name='开关路号',choices=ENDPOINT_CHOICES,default=1)
     mac_status = models.IntegerField(verbose_name='开关状态', null=True, blank=True)
-    temperature = models.IntegerField(verbose_name='温度光感', null=True, blank=True)
+    temperature = models.CharField(verbose_name='温度光感', null=True, blank=True, max_length=20)
 
     def __str__(self):
         return self.mac.mac_name

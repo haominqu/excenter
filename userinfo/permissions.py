@@ -14,7 +14,6 @@ from .models import UserInfo
 def login_decorator(func):
     def token_func(request, *args, **kwargs):
         token = request.META.get("HTTP_AUTHORIZATION")
-        print("@@",token.split(' ')[2])
         if not token:
             result = False
             data = ""
@@ -28,9 +27,7 @@ def login_decorator(func):
             error = "身份已经过期，请重新登入"
             return JsonResponse({"result": result, "data": data, "error": error})
         else:
-            print("@@")
             kwargs['token'] = front_token
-            print("###")
             return func(request, *args, **kwargs)
 
     return token_func
@@ -63,14 +60,10 @@ class IsAdmin(permissions.BasePermission):
 
 
 class IsStaffGuest(permissions.BasePermission):
-    def has_permission(self, request, view):
-        user_name = request.POST.get("user_name", "")
-        if user_name == "":
-            return False
-        user = UserInfo.objects.filter(username=user_name)
-        if not user:
-            return False
-        if user[0].role == 2 or user[0].role == 3:
+    @method_decorator(login_decorator)
+    def has_permission(self, request, view, *args, **kwargs):
+        token = kwargs['token']
+        if token['role'] == 2 or token['role'] == 3:
             return True
         else:
             return False

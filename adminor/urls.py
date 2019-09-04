@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
+    url(r'admin/index/$', IndexView.as_view(), name='admin_index'),            # 首页
     url(r'admin/login/$', AdminLogin.as_view(), name='admin_login'),           # 管理员登录(已调通)
     url(r'upload/image/$', UploadImage.as_view(), name='upload_image'),        # 添加人脸图片(已调通)
     url(r'staff/manage/$', StaffManageView.as_view(), name='staff_manage'),    # 人员管理:添加使用者(业务人员)、删除使用者(业务人员)

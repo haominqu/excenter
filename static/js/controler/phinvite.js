@@ -1,11 +1,23 @@
-// base_url="http://192.168.221.170:8003";
-base_url="http://192.168.188.171:8000";
+base_url="http://192.168.221.182:8003";
+// base_url="http://192.168.188.171:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
 var invite_add_url = base_url + "/staff/guest/manage/";
 var invite_image_url = base_url + "/staff/upload/image/";
 var token = localStorage.getItem("token");
 
 $(function () {
+    if(token==null){
+        location.href="/phone/";
+    }
+    $("input[name='user_name']").blur(function(){
+        var phone = $(this).val();
+        if(!(/^1[3456789]\d{9}$/.test(phone))){
+            $("span[name='mobilewderr']").text("手机号码有误，请重填");
+            $(this).focus();
+        }else{
+           $("span[name='mobilewderr']").text("");
+        }
+    });
 
     $("#file-input").on("change",function(){
         var form_data = new FormData();
@@ -18,13 +30,17 @@ $(function () {
              headers:{'Authorization':'hm JWT '+token},
              processData: false,
              contentType: false,
+             beforeSend: function(){
+                $("img[name='face_picture']").attr("src","../static/images/icon/timg.gif");
+                $("span[name='facewderr']").text("因人脸识别像素要求较高，上传过程可能较慢，请您耐心等待!");
+             },
              error:function (err) {
                  console.log(err);
              },
              success:function (res) {
                 $("#face_picture").val(res.data);
+                console.log(res.data);
                 $("img[name='face_picture']").attr("src",res.data);
-
              },
         });
     });
@@ -44,11 +60,14 @@ $(function () {
                 var initemf = "<div class=\"invite_list_it\"><span class=\"invite_list_it_o\">"+v.realname+"</span><span class=\"invite_list_it_s\">"+v.department+"</span>";
                 var initems = "";
                 if(v.audit_status==0){
-                    initems="<span class=\"invite_list_it_t\">未审核</span></div>"
+                    initems="<span class=\"invite_list_it_t\"><img src='../static/images/icon/nosh.png' alt=''></span></div>";
+                    // initems="<span class=\"invite_list_it_t\">未审核</span></div>";
                 }else if(v.audit_status==1){
-                    initems="<span class=\"invite_list_it_t\">通过</span></div>"
+                    initems="<span class=\"invite_list_it_t\"><img src='../static/images/icon/pass.png' alt=''></span></div>";
+                    // initems="<span class=\"invite_list_it_t\">通过</span></div>";
                 }else{
-                    initems="<span class=\"invite_list_it_t\">未通过</span></div>"
+                    initems="<span class=\"invite_list_it_t\"><img src='../static/images/icon/nopass.png' alt=''></span></div>";
+                    // initems="<span class=\"invite_list_it_t\">未通过</span></div>";
                 }
                 apdom.append(initemf+initems);
             });
@@ -65,6 +84,10 @@ $(function () {
         var position = $("#position").val();
         var department = $("#department").val();
         var face_picture = $("#face_picture").val();
+        if(user_name==""||real_name==""||position==""||department==""||face_picture==""){
+            $("span[name='invitewderr']").text("请正确填写信息");
+        }
+
         if(user_name!=""&&real_name!=""&&position!=""&&department!=""&&face_picture!=""){
             $.ajax({
                 url:invite_add_url,
@@ -89,6 +112,7 @@ $(function () {
                 }
             })
         }
+
 
     })
 
