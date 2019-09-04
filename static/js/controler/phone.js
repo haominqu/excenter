@@ -28,13 +28,14 @@ $(function () {
                         if(res.result==false){
                             $("#error").text(res.error);
                         }else {
-                                console.log("$$$$$",res.data.user_id);
+                                // console.log("$$$$$",res.data.user_id);
                               localStorage.setItem("username",res.data.role_name);
                               localStorage.setItem("userid",res.data.user_id);
                               localStorage.setItem("position",res.data.position);
                               localStorage.setItem("department",res.data.department);
                               localStorage.setItem("token",res.data.token);
-                              // location.href="/phoned/";
+                              localStorage.setItem("role",res.data.role);
+                              location.href="/phoned/";
                         }
 
                     },

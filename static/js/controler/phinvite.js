@@ -18,13 +18,20 @@ $(function () {
              headers:{'Authorization':'hm JWT '+token},
              processData: false,
              contentType: false,
+             beforeSend: function () {
+                $("img[name='face_picture']").attr("src","../static/images/icon/timg.gif");
+             },
              error:function (err) {
                  console.log(err);
              },
              success:function (res) {
+
                 $("#face_picture").val(res.data);
                 $("img[name='face_picture']").attr("src",res.data);
 
+             },
+             complete: function () {
+                console.log("aaaa");
              },
         });
     });

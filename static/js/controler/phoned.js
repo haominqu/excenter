@@ -19,6 +19,7 @@ $(function () {
         var userid = localStorage.getItem("userid");
         var position = localStorage.getItem("position");
         var department = localStorage.getItem("department");
+        var role = localStorage.getItem("role");
         var socket = new WebSocket("ws:" + window.location.host + "/userinfo/" + "build_socket/" + userid);
         socket.onopen = function () {
             console.log('WebSocket open');//成功连接上Websocket
@@ -108,6 +109,11 @@ $(function () {
 
         });
 
+        // 获取个人权限
+
+;        if(role==3){
+             $("div[name='invite']").css("display","none");
+        }
 
 
         //获取可控设备列表
@@ -150,6 +156,9 @@ $(function () {
 
             }
         });
+
+
+
 // 获取自动手动
          $.ajax({
             url:ctr_mac_atmt,
