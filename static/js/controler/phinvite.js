@@ -30,17 +30,21 @@ $(function () {
              headers:{'Authorization':'hm JWT '+token},
              processData: false,
              contentType: false,
-             beforeSend: function(){
+
+             beforeSend: function () {
                 $("img[name='face_picture']").attr("src","../static/images/icon/timg.gif");
-                $("span[name='facewderr']").text("因人脸识别像素要求较高，上传过程可能较慢，请您耐心等待!");
              },
              error:function (err) {
                  console.log(err);
              },
              success:function (res) {
+
                 $("#face_picture").val(res.data);
                 console.log(res.data);
                 $("img[name='face_picture']").attr("src",res.data);
+             },
+             complete: function () {
+                console.log("aaaa");
              },
         });
     });

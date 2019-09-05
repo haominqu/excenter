@@ -10,84 +10,75 @@
     </head>
     <body>
         <div class="backindex">
-            <a href="/invite/">
+            <a href="/phoned/">
                 <img src="../static/images/icon/back.png" class="back-icon"/>
             </a>
         </div>
-        <div class="guest_info">
-            <div class="databox">
-                <div class="databox-left">
-                    <img src="../static/images/icon/mobile.png" class="mobile-icon"/>
-                    <div class="databox-left-et">Mobile</div>
-                </div>
-                <div class="databox-right">
-                    <input type="text" name="user_name" id="user_name" class="text-input" placeholder="手机号">
-                    <span name="mobilewderr" class="mobilewderr" style="font-size:3em;color: #ff9b79d1"></span>
-
-                </div>
+        <div class="hm_invite_add">
+            <div>
+                <span>
+                    <input type="text" id="user_name" value="" placeholder="手机号" class="hm_invite_add_inp">
+                </span>
+                <span name="oldpwderr" style="font-size:4em;color: darkred"></span>
             </div>
-            <div class="databox">
-                <div class="databox-left">
-                    <img src="../static/images/icon/realname.png" class="realname-icon"/>
-                    <div class="databox-left-et">Name</div>
-                </div>
-                <div class="databox-right">
-                    <input type="text" name="real_name" id="real_name" class="text-input" placeholder="姓名">
-                </div>
+            <div>
+                <span>
+                    <input type="text" id="real_name" value="" placeholder="姓名" class="hm_invite_add_inp">
+                </span>
+                <span name="newpwderr" style="font-size:4em;color: darkred"></span>
             </div>
-            <div class="databox">
-                <div class="databox-left">
-                     <img src="../static/images/icon/position.png" class="position-icon"/>
-                    <div class="databox-left-et">Position</div>
-                </div>
-                <div class="databox-right">
-                    <input type="text" name="position" id="position" class="text-input" placeholder="职位">
-                </div>
+            <div>
+                <span>
+                    <input type="text" id="position" value="" placeholder="职位" class="hm_invite_add_inp">
+                </span>
+                <span name="cnewpwderr" style="font-size:4em;color: darkred"></span>
             </div>
-            <div class="databox">
-                <div class="databox-left">
-                    <img src="../static/images/icon/deparment.png" class="deparment-icon"/>
-                    <div class="databox-left-et">Department</div>
-                </div>
-                <div class="databox-right">
-                    <input type="text" name="department" id="department" class="text-input" placeholder="公司">
-                </div>
+            <div>
+                <span>
+                    <input type="text" id="department" value="" placeholder="公司" class="hm_invite_add_inp">
+                </span>
+                <span name="cnewpwderr" style="font-size:4em;color: darkred"></span>
             </div>
-            <div class="databox">
-                <div class="databox-left">
-                    <img src="../static/images/icon/face.png" class="face-icon"/>
-                    <div class="databox-left-et">Face Picture</div>
-                </div>
-                <div>
-                    <span name="facewderr" class="facewderr" style="font-size:3em;color: #ff9b79d1"></span>
-                </div>
-                <div class="databox-right">
+            <div>
+                <div class="face_add">
                     <label for="file-input">
-                        <img src="../static/images/icon/shangchuan.png" name="face_picture" id="face_picture" class="face-img"/>
+                        <img  name="face_picture"  src="../static/images/icon/upload.png"/>
                     </label>
                     <input type="file" capture="camera" accept="image/*,video/*" name="logo" id="file-input" style="display: none;">
+                    <div style="color: white;font-size: 6em">
+                        点击上传
+                    </div>
                 </div>
-            </div>
 
-            <!--<div class="face_add">
-            <label for="file-input">
-                <img src="../static/images/icon/KHCFDC.png" name="face_picture"/>
-            </label>
-            <input type="file" capture="camera" accept="image/*" name="logo" id="file-input" style="display: none;">
+            </div>
             <div>
-                点击上传
-            </div>-->
-        </div>
-            <div class="invite-err">
-                <span name="invitewderr" class="invitewderr" style="font-size:3em;color: #ff9b79d1"></span>
-            </div>
+                <input type="hidden" id="face_picture" value="">
+                <span>
+                    <input type="button" name=""  id="subinvite" class="hm_invite_add_btn" value="确定">
+                </span>
 
-            <div class="subinvite" id="subinvite">
-                <div>
-                    <span>提交资料</span>
-                </div>
             </div>
-
         </div>
+
+
+
+
+
+{#        <input type="text" id="user_name" value="" placeholder="手机号" class="hm_invite_add_inp">#}
+{#        <input type="text" id="real_name" value="" placeholder="姓名" class="hm_invite_add_inp">#}
+{#        <input type="text" id="position" value="" placeholder="职位" class="hm_invite_add_inp">#}
+{#        <input type="text" id="department" value="" placeholder="公司" class="hm_invite_add_inp">#}
+{##}
+{#        <input type="button" name=""  id="subinvite" class="hm_invite_add_btn" value="确定">#}
+
+
+
+
+
+
+
+
+
+
     </body>
 </html>

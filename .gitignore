@@ -15,4 +15,10 @@ guest/migrations/*
 guest/__pycache__/*
 staff/migrations/*
 staff/__pycache__/*
+screen/migrations/*
+screen/__pycache__/*
+media/face_info/guest/*
+media/face_info/staff/*
+media/tempory/*
+media/tempory_m/*
 

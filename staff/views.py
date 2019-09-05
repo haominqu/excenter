@@ -106,7 +106,8 @@ class UploadImage(APIView):
         f.close()
         myname = socket.gethostname()
         myaddr = socket.gethostbyname(myname)
-        file_path = "http://" + myaddr + ":8003" + "/media/tempory_m/"+file_name
+        file_path = "http://" + myaddr + ":8000" + "/media/tempory_m/"+file_name
+
         result = True
         data = file_path
         error = ""

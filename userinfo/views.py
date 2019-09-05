@@ -33,9 +33,11 @@ allconn = defaultdict(list)
 
 
 def send_web_msg(user_id,msg):
+    print(allconn)
     for i in allconn:
-        if i != user_id:
-            allconn[i].send(msg)
+        # if i != user_id:
+        print("$$$$",i)
+        allconn[i].send(msg)
     return True
 
 @accept_websocket
@@ -51,6 +53,7 @@ def build_socket(request, user_id):
     # 判断是不是websocket连接
     if request.is_websocket():
         # 将链接(请求？)存入全局字典中
+        print("user",user_id)
         allconn[str(user_id)] = request.websocket
         for message in request.websocket:
             if message == "1111":

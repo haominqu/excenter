@@ -29,7 +29,10 @@ $(function () {
         var username = $("#username").val();
         var password = $("#password").val();
         if(username==""||password==""){
-            $("span[name='loginwderr']").text("用户名密码不能为空");
+
+            $("#error").text("用户名密码不能为空");
+
+
         }else {
             $.ajax({
                 url:login_url,
@@ -41,14 +44,20 @@ $(function () {
                 },
                 success:function (res) {
                         console.log(res);
-                        localStorage.setItem("username",res.data.role_name);
-                        localStorage.setItem("userid",res.data.user_id);
-                        localStorage.setItem("role",res.data.role);
-                        localStorage.setItem("position",res.data.position);
-                        localStorage.setItem("department",res.data.department);
-                        localStorage.setItem("face_picture",res.data.face_picture);
-                        localStorage.setItem("token",res.data.token);
-                        location.href="/phoned/";
+
+                        if(res.result==false){
+                            $("#error").text(res.error);
+                        }else {
+                                // console.log("$$$$$",res.data.user_id);
+                              localStorage.setItem("username",res.data.role_name);
+                              localStorage.setItem("userid",res.data.user_id);
+                              localStorage.setItem("position",res.data.position);
+                              localStorage.setItem("department",res.data.department);
+                              localStorage.setItem("token",res.data.token);
+                              localStorage.setItem("role",res.data.role);
+                              location.href="/phoned/";
+                        }
+
                     },
                 error:function () {
  // localStorage.setItem("key","value");//以“key”为名称存储一个值“value”

@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^staff/', include('staff.urls')),
     url(r'^guest/', include('guest.urls')),
     url(r'^history/', include('history.urls')),
+    url(r'^screen/', include('screen.urls')),
     url(r'drugcon/$', TemplateView.as_view(template_name='drugcon.html'), name='drugcon'),
 # phone
     url(r'^phone/$', TemplateView.as_view(template_name="phone.html"), name='phone'),

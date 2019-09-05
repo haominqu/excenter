@@ -58,7 +58,6 @@ class Scene(models.Model):
         return self.sc_name
 
 
-
 class Machine(models.Model):
     mac_name = models.CharField(verbose_name='设备名称', max_length=50, null=False)
     mac_devID = models.CharField(verbose_name='设备码', max_length=50, null=False)
