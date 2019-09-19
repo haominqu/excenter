@@ -15,6 +15,7 @@ from .serializers import StaffSerializer, GuestSerializer
 from userinfo.permissions import IsAdmin, login_decorator
 from excenteron.settings import BASE_URL
 from machine.models import *
+from userinfo.fourrandom import generate_code
 
 # base
 import logging
@@ -166,6 +167,7 @@ class StaffManageView(APIView):
         password = make_password(user_name[-4: ], None, 'pbkdf2_sha256')
         user_info.password = password
         user_info.role = 2
+        user_info.uu_id = str(int(round(time.time() * 1000))) + generate_code()
         try:
             user_info.save()
         except ObjectDoesNotExist as e:
@@ -327,7 +329,6 @@ class GuestAudit(APIView):
         """
         guest_id = request.POST.get("guest_id", "")
         is_audit = request.POST.get("is_audit", "")
-        print(guest_id, is_audit)
         if guest_id == "" or is_audit == "":
             result = False
             data = ""

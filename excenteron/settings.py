@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'guest',
     'history',
     'screen',
+    'service',
 ]
 
 MIDDLEWARE = [

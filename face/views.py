@@ -4,15 +4,47 @@ from rest_framework.views import APIView
 # django
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 # self_project
 from userinfo.models import UserInfo, Guest, UserDetail
-
+from .dhface import FaceManage
 
 # base
 import logging
+import requests
+import uuid
+import base64
+import time
+import os
 
 # Create your views here.
+
+
+class TestFaceView(APIView):
+
+    def get(self, request):
+        guest_id = request.GET.get("guest_id", "")
+        add_face_result = FaceManage().face_regist(guest_id)
+        return JsonResponse({"result": add_face_result, "data": add_face_result, "error": add_face_result})
+        # if add_face_result:
+        #     result = True
+        #     data = "注册成功"
+        #     error = ""
+        #     return JsonResponse({"result": result, "data": data, "error": error})
+        # else:
+        #     result = False
+        #     data = ""
+        #     error = "注册失败"
+        #     return JsonResponse({"result": result, "data": data, "error": error})
+
+    def post(self,request):
+        a=request.POST.get("action")
+        b=request.POST.get("faceid")
+        c=request.POST.get("time")
+        # d=request.POST.get("")
+        print(a,b,c)
+
 
 
 class StaffFaceView(APIView):

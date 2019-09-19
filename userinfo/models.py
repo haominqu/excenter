@@ -29,10 +29,12 @@ class UserInfo(models.Model):
     is_active = models.IntegerField(verbose_name='激活状态', choices=ACTIVE_CHOICES, default=0)
     user_secret = models.CharField(verbose_name='用户JWT秘钥', max_length=200, default=uuid4())
     is_login = models.BooleanField(verbose_name='是否登录', default=False)
+    uu_id = models.CharField(verbose_name='uuid', max_length=200, null=True, blank=True)
 
 
     def __str__(self):
         return self.username
+
 
 class Guest(models.Model):
     user = models.OneToOneField(UserInfo, verbose_name="用户")
