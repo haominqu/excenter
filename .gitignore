@@ -21,4 +21,6 @@ media/face_info/guest/*
 media/face_info/staff/*
 media/tempory/*
 media/tempory_m/*
+service/migrations/*
+service/__pycache__/*
 

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-
+from face.views import TestFaceView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^onlinemac/', include('machine.urls')),
     url(r'^index/', TemplateView.as_view(template_name="index.html"), name='index'),
     url(r'^face/', include('face.urls')),
+    url(r'^service/', include('service.urls')),
     url(r'^adminor/', include('adminor.urls')),
     url(r'^staff/', include('staff.urls')),
     url(r'^guest/', include('guest.urls')),
@@ -43,5 +44,8 @@ urlpatterns = [
 # screen
     url(r'^screenshow/', TemplateView.as_view(template_name="screen.html"), name='screen'),
 
+
+
+    url(r'service', TestFaceView.as_view(), name='service'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

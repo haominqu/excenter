@@ -1,5 +1,7 @@
 // base_url="http://192.168.188.171:8000";
+
 base_url="http://192.168.188.171:8000";
+
 // base_url="http://192.168.188.171:8000";
 // var login_url = base_url + "/userinfo/staff_guest/login/";
 var login_url =base_url+ "/userinfo/staff_guest/login/";

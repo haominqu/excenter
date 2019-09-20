@@ -4,6 +4,10 @@ from django.contrib.auth.hashers import make_password
 
 # selfproject
 from .models import UserInfo, Guest, UserDetail
+from userinfo.fourrandom import generate_code
+
+# base
+import time
 
 # Register your models here.
 
@@ -11,6 +15,7 @@ from .models import UserInfo, Guest, UserDetail
 class UserInfoAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
+        obj.uu_id = str(int(round(time.time() * 1000))) + generate_code()
 
         obj.password = make_password(obj.password, None, 'pbkdf2_sha256')
         obj.save()

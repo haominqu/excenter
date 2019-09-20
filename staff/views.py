@@ -14,6 +14,7 @@ from userinfo.models import *
 from .permissions import *
 from .serializers import *
 from userinfo.permissions import *
+from userinfo.fourrandom import generate_code
 
 # base
 import logging
@@ -104,9 +105,10 @@ class UploadImage(APIView):
         for chunk in face_picture.chunks():
             f.write(chunk)
         f.close()
-        myname = socket.gethostname()
-        myaddr = socket.gethostbyname(myname)
-        file_path = "http://" + myaddr + ":8000" + "/media/tempory_m/"+file_name
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        file_path = "http://" + ip + ":8003" + "/media/tempory_m/"+file_name
 
         result = True
         data = file_path
@@ -134,7 +136,6 @@ class GuestManageView(APIView):
         position = request.POST.get("position", "")  # 职位(允许为空)
         department = request.POST.get("department", "")  # 公司(允许为空)
         face_picture = request.POST.get("face_picture", "")
-        print(user_name, real_name, position, department, face_picture)
         if user_name == "" or real_name == "" or face_picture == "":
             result = False
             data = ""
@@ -156,6 +157,7 @@ class GuestManageView(APIView):
         user_info.username = user_name
         user_info.password = user_name[-4:]
         user_info.role = 3
+        user_info.uu_id = str(int(round(time.time() * 1000))) + generate_code()
         try:
             user_info.save()
         except ObjectDoesNotExist as e:

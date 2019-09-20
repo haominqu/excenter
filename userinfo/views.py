@@ -24,6 +24,8 @@ from .models import *
 import logging
 import json
 import socket
+import requests
+import re
 
 # Create your views here.
 
@@ -213,7 +215,52 @@ class UserAlterPwd(APIView):
 
 
 
+class FaceInfoView(APIView):
 
+    def get(self, request):
+        """
+        审核通过, 激活状态下, 返回人脸信息
+        包括：用户id, 用户真实姓名, 欢迎语, 人脸图片
+        :param request:
+        :return:
+        """
+        user_id = request.GET.get('user_id', '')
+        if not user_id:
+            # if user_id is '', return all;
+            staffs = UserDetail.objects.filter(user__is_active=1, user__role=2)
+            guests = Guest.objects.filter(user__is_active=1, audit_status=1, user__role=3)
+
+        else:
+            # else return userinfo of user_id
+            staffs = UserDetail.objects.filter(user__is_active=1, user__role=2, user_id=user_id)
+            guests = Guest.objects.filter(user__is_active=1, audit_status=1, user__role=3, user_id=user_id)
+            if not staffs and not guests:
+                code = 1001
+                data = ""
+                error = "未查询到该id用户"
+                return JsonResponse({"code": code, "data": data, "error": error})
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+        data = []
+        for staff in staffs:
+            staff_info = {}
+            staff_info['user_id'] = staff.user.uu_id
+            staff_info['real_name'] = staff.realname
+            staff_info['welcome_msg'] = "欢迎" + staff.realname + "领导莅临参观指导!"
+            staff_info['face_picture'] = "http://" + ip + ":8000" + "/media" + str(staff.face_picture)
+            data.append(staff_info)
+        for guest in guests:
+            guest_info = {}
+            guest_info['user_id'] = guest.user.uu_id
+            guest_info['real_name'] = guest.realname
+            guest_info['welcome_msg'] = "欢迎" + guest.realname + "领导莅临参观指导!"
+            guest_info['face_picture'] = "http://" + ip + ":8000" + "/media" + str(guest.face_picture)
+            data.append(guest_info)
+        code = 1000
+        data = data
+        error = ""
+        return JsonResponse({"code": code, "data": data, "error": error})
 
 
 
