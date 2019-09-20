@@ -1,4 +1,5 @@
 
+// base_url="http://192.168.188.239:8003";
 base_url="http://192.168.188.171:8000";
 
 // base_url="http://192.168.188.171:8000";
@@ -11,7 +12,7 @@ var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
 var ctr_mac_url_curtain = base_url + "/onlinemac/curtain/";
 
-var ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
+var  ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
 
 
@@ -165,9 +166,9 @@ $(function () {
                         }
                     }else if(data[index].mac.mac_type=="Ar"){
                         if(data[index].mac_status==0){
-                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/arclose.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }else {
-                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/aropen.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }
                     }
 
@@ -224,13 +225,47 @@ $(function () {
         $("#atmt").on("click",function () {
             var atmt = $(this).attr("_atmt");
             if(atmt == "at"){
-                $(this).text("手动");
-                $(this).attr("_atmt","mt");
-                $(".control").attr("disabled",false);
+                $.ajax({
+                    url:ctr_mac_atmt,
+                    type:'put',
+                    dataType:'json',
+                    headers:{'Authorization':'hm JWT '+token},
+                    data:{
+                        mac_mode:2,
+                    },
+                    success:function (res){
+                        $("#atmt").text("手动");
+                        $("#atmt").attr("_atmt","mt");
+                        $(".control").attr("disabled",false);
+                    },
+                    error:function (error){
+
+                    }
+                })
             }else {
-                $(this).text("自动");
-                $(this).attr("_atmt","at");
-                $(".control").attr("disabled",true);
+                $.ajax({
+                    url:ctr_mac_atmt,
+                    type:'put',
+                    dataType:'json',
+                    headers:{'Authorization':'hm JWT '+token},
+                    data:{
+                        mac_mode:1,
+                    },
+                    success:function (res){
+                        $("#atmt").text("自动");
+                        $("#atmt").attr("_atmt","at");
+                        $(".control").attr("disabled",true);
+                    },
+                    error:function (error){
+
+
+                    }
+                })
+
+
+
+
+
             }
 
         })
