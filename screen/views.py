@@ -8,6 +8,7 @@ from django.db.models import Avg
 # self_project
 from history.models import *
 from userinfo.models import Guest
+from machine.models import Machine,ControlMac
 
 # base
 import time
@@ -91,3 +92,57 @@ class PMCO2View(APIView):
         data = data
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class ElectView(APIView):
+
+    def get(self, request):
+
+        data = []
+        elect_macs = ControlMac.objects.filter(mac__kind=6)
+
+        for ele_it in elect_macs:
+            print(ele_it)
+            dat_item = {}
+            dat_item["name"] = "节能消耗"
+            dat_item["value"] = int(ele_it.temperature)
+            data.append(dat_item)
+            dat_item = {}
+            dat_item["name"] = "正常消耗"
+            dat_item["value"] = 80
+            data.append(dat_item)
+        result = True
+        data = data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+        # [
+        #     {
+        #         name: "节能消耗",
+        #         value: 12
+        #     },
+        #     {
+        #         name: "正常消耗",
+        #         value: 60
+        #     }, {
+        #         name: "节能消耗",
+        #         value: 10
+        #     },
+        #     {
+        #         name: "正常消耗",
+        #         value: 120
+        #     },
+        #     {
+        #         name: "节能消耗",
+        #         value: 100
+        #     }, {
+        #         name: "正常消耗",
+        #         value: 121
+        #     },
+        #     {
+        #         name: "节能消耗",
+        #         value: 93
+        #     }, {
+        #         name: "正常消耗",
+        #         value: 121
+        #     }
+        # ]
