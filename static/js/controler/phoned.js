@@ -1,4 +1,4 @@
-base_url="http://192.168.221.182:8003";
+base_url="http://192.168.188.171:8000";
 // base_url="http://192.168.188.171:8000";
 var login_url = base_url + "";
 var lamp_url = base_url + "";
@@ -7,6 +7,7 @@ var air_url = base_url + "";
 var change_pwd_url = base_url + "";
 var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
+var ctr_mac_url_curtain = base_url + "/onlinemac/curtain/";
 
 var ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
@@ -46,13 +47,29 @@ $(function () {
                    $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_mac(1,'+bdata.mac_id+')');
                 };
             }else if(bdata.mac_type==2){
+                console.log();
                 // 光感
                 if(bdata.mac_sty=='19'){
                     console.log(bdata.mac_st);
                     $('#light').text(bdata.mac_st);
-                }else{
-                    console.log("a");
+                }else if(bdata.mac_sty=="Ar"){
+                    // 窗帘
+                    console.log("a"+bdata.mac_st);
+                     $("input[_mid='"+bdata.mac_id+"']").attr("disabled",false);
+                if(bdata.mac_st==100){
 
+                   $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp2.png");
+                   $("input[_mid='"+bdata.mac_id+"']").val("关");
+                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
+                   $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(0,'+bdata.mac_id+')');
+                }else {
+                   $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp.png");
+
+                   $("input[_mid='"+bdata.mac_id+"']").val("开");
+                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
+
+                   $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(1,'+bdata.mac_id+')');
+                };
                 }
 
 
@@ -128,19 +145,30 @@ $(function () {
             data:{
             },
             success:function (res) {
-                // console.log("!!!res");
+                console.log(res);
+
                 var data = res.data;
                 var showt = "";
 
                 for(let index in data) {
-
+                    console.log(data[index]);
                     var showit1 = "<div class=\"hm_ctr_block\"><div>"+data[index].mac.mac_name+"</div>";
                     var showit2 = "";
-                    if(data[index].mac_status==0){
-                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
-                    }else {
-                        showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                    console.log(data[index].mac.mac_type);
+                    if(data[index].mac.mac_type=="62"){
+                        if(data[index].mac_status==0){
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }else {
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }
+                    }else if(data[index].mac.mac_type=="Ar"){
+                        if(data[index].mac_status==0){
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }else {
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/lamp2.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }
                     }
+
 
 
 
@@ -231,6 +259,29 @@ $(function () {
 function ctr_mac(mac_st,mac_id) {
     $.ajax({
         url:ctr_mac_url,
+        type:'get',
+        dataType:'json',
+        headers:{'Authorization':'JWT '+token},
+        data:{
+            mac_id:mac_id,
+            mac_st:mac_st,
+        },
+        success:function (res) {
+            $("input[_mid='"+mac_id+"']").attr("disabled",true);
+            return false
+
+        },
+        error:function (error) {
+            return false
+        }
+    })
+
+}
+
+// 开关灯点击
+function ctr_ar_mac(mac_st,mac_id) {
+    $.ajax({
+        url:ctr_mac_url_curtain,
         type:'get',
         dataType:'json',
         headers:{'Authorization':'JWT '+token},
