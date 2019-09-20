@@ -40,6 +40,8 @@ urlpatterns = [
     url(r'^invite/', TemplateView.as_view(template_name="ph_invite.html"), name='invite'),
     url(r'^inviteadd/', TemplateView.as_view(template_name="ph_invite_add.html"), name='inviteadd'),
     url(r'^invitesuc/', TemplateView.as_view(template_name="ph_invite_success.html"), name='inviteadd'),
+# screen
+    url(r'^screenshow/', TemplateView.as_view(template_name="screen.html"), name='screen'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

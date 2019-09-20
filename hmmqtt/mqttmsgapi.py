@@ -15,7 +15,7 @@ class ReciveMessage:
     def ac(self,arg,argc,argsql):
 
         if argc in b.keys():
-            print("@@@##$%%^^&&")
+
             if a[argc] != b[argc]:
                 b[argc] = a[argc]
             else:
@@ -37,6 +37,7 @@ class ReciveMessage:
         if topical == "data":
             # 手动模式
             if mac_mode.mac_mode == 2:
+                print("&&&&")
                 mac_detail = json.loads(msg['msgContent'])
                 devID = mac_detail['devID']
                 endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
@@ -51,7 +52,7 @@ class ReciveMessage:
                 backdata["mac_sty"] = now_mc[0].mac.mac_type
                 backdata['mac_st'] = now_mc[0].mac_status
                 backdata['mac_type'] = '2'
-
+                print("@@@@@@###$$")
                 send_web_msg('', str(backdata).replace('\'', '\"'))
 
             # 自动模式
@@ -81,7 +82,6 @@ class ReciveMessage:
                         macs.update(mac_status=1)
                         for m in macs:
                             hmmqtt.mqttctlapi.LampAPI().lamp_on(m.mac.id)
-
                     else:
 
                         # 次感应器状态回复
@@ -95,30 +95,35 @@ class ReciveMessage:
                             # if a['aa'] != b['aa']:
                             #     print("*****cs")
                             #     b['aa'] = a['aa']
+                            # *******************************
+                            # auto close
                             from threading import Timer
-                            t = Timer(10, self.ac,[macs,devID,macs])
-
-                            t.start()
+                            # t = Timer(10, self.ac,[macs,devID,macs])
+                            # t.start()
+                            # ***********************************
                             # else:
                             #     for m in macs:
                             #         hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
                             #     print("*****")
 
-                            print("$$$$$$$$$$$$$$$", a['aa'])
-                            print("$$$$$$$$$$$$$$$", b['aa'])
+                            # print("$$$$$$$$$$$$$$$", a['aa'])
+                            # print("$$$$$$$$$$$$$$$", b['aa'])
 
 
                             # for m in macs:
                             #     hmmqtt.mqttctlapi.LampAPI().lamp_off(m.mac.id)
         elif topical == "alarm":
+            print("###$%^^^",mac_mode.mac_mode)
             if mac_mode.mac_mode == 2:
+
                 mac_detail = json.loads(msg['msgContent'])
                 devID = mac_detail['devID']
+
                 endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
                 attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
                 mac = Machine.objects.filter(mac_devID=devID)
                 if mac:
-                    now_mc = ControlMac.objects.filter(mac=mac, endpointnum=endpointNumber)
+                    now_mc = ControlMac.objects.filter(mac__mac_devID=devID, endpointnum=endpointNumber)
                     now_mc.update(mac_status=attributeValue)
                 # 返回数据到前端
                 backdata = {}
@@ -131,6 +136,7 @@ class ReciveMessage:
                 # if mac_detail['type'] == '62':
                 # 判断自动手动
             elif mac_mode.mac_mode == 1:
+                print("!!!!2")
                 mac_detail = json.loads(msg['msgContent'])
                 devID = mac_detail['devID']
                 endpointNumber = mac_detail['endpoints'][0]['endpointNumber']

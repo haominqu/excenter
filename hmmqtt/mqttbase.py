@@ -25,7 +25,7 @@ def on_connect(client, userdata, flag, respons_code):
 
 def on_message(client, userdata, msg):
 
-    # print('@@@@@@@',out)
+    print('@@@@@@@',msg)
     # if msg.topic == 'gw/third/#':
     #     print(out)
     ReciveMessage().readmessage(client, userdata, msg)
@@ -134,14 +134,14 @@ client = mqtt.Client(client_id="mqtt_hm", clean_session=False)
 def mqtt_run():
     client.on_connect = on_connect
     client.on_message = on_message
-    broker = '127.0.0.1'
+    broker = '192.168.188.171'
     client.connect(broker, 1883, 62)
-    client.username_pw_set('user', 'user')
+    client.username_pw_set('', '')
     client.reconnect_delay_set(min_delay=1, max_delay=2000)
     mqttthread = Thread(target=mqttfunction)
     mqttthread.start()
 
-# mqtt_run()
+mqtt_run()
 # if __name__ == "__main__":
 #     mqtt_run()
 #     time.sleep(10)

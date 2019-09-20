@@ -24,7 +24,11 @@ class LampAPI:
 
 class CurtainAPI:
 
-    def curtain_on(self):
+    def curtain_on(self,mac_id):
+        machine = Machine.objects.filter(id=mac_id)[0]
+        gw_gwID = machine.gate.gw_gwID
+        payload = {"timestamp": "","msgContent": "{\"cmd\": \"501\",\"gwID\": \"" + gw_gwID + "\",\"devID\": \"" + machine.mac_devID + "\",\"clusterId\": 258,\"commandType\": 1,\"endpointNumber\": 2,\"commandId\": 1}"}
+        publish('gw/third/' + gw_gwID + '/req', json.dumps(payload), 2)
         return True
 
     def curtain_off(self):

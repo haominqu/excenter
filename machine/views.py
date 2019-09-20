@@ -32,6 +32,19 @@ class Lamp(APIView):
         return JsonResponse({"code": '', "shuju": '', "msg": 'success'})
 
 
+class Curtain(APIView):
+
+    def get(self, request):
+        mac_id = request.GET.get('mac_id')
+        mac_st = request.GET.get('mac_st')
+        if mac_st == '1':
+            CurtainAPI().curtain_on(mac_id)
+        else:
+            CurtainAPI().curtain_off(mac_id)
+        return JsonResponse({"code": '', "shuju": '', "msg": 'success'})
+
+
+
 class ControllMachineM(APIView):
     """
     desc:可控设备
