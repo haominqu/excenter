@@ -91,6 +91,7 @@ class StaffGuestLogin(APIView):
             error = "用户名密码不能为空"
             return JsonResponse({"result": result, "data": data, "error": error})
         user = UserInfo.objects.filter(username=user_name)
+        print(user)
         if not user:
             result = False
             data = ""
