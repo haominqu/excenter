@@ -54,6 +54,8 @@ $(function () {
                 if(bdata.mac_sty=='19'){
                     console.log(bdata.mac_st);
                     $('#light').text(bdata.mac_st);
+                }else if(bdata.mac_sty=="42"){
+                    $('#co2').text(bdata.mac_st);
                 }else if(bdata.mac_sty=="Ar"){
                     // 窗帘
                     console.log("a"+bdata.mac_st);

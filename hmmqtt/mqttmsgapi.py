@@ -51,6 +51,7 @@ class ReciveMessage:
                 backdata["mac_id"] = now_mc[0].mac.id
                 backdata["mac_sty"] = now_mc[0].mac.mac_type
                 backdata['mac_st'] = now_mc[0].mac_status
+                backdata['mac_kind'] = now_mc[0].mac.kind
                 backdata['mac_type'] = '2'
                 print("@@@@@@###$$")
                 send_web_msg('', str(backdata).replace('\'', '\"'))
@@ -70,6 +71,7 @@ class ReciveMessage:
                 backdata["mac_id"] = now_mc[0].mac.id
                 backdata["mac_sty"] = now_mc[0].mac.mac_type
                 backdata['mac_st'] = now_mc[0].mac_status
+                backdata['mac_kind'] = now_mc[0].mac.kind
                 backdata['mac_type'] = '2'
 
                 send_web_msg('', str(backdata).replace('\'', '\"'))

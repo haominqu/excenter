@@ -24,7 +24,6 @@ from .models import *
 import logging
 import json
 import socket
-import requests
 import re
 
 # Create your views here.
