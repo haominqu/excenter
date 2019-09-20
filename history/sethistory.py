@@ -13,7 +13,8 @@ class SetHistory:
             UseHistory.objects.create(userid=user_id,macid=mac_id,temtime=tem_time,detail=use_detail)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
     # temNo"感应器id"
     # temname"感应器名称"
@@ -24,7 +25,8 @@ class SetHistory:
             TemperatureHistory.objects.create(temNo=tem_No,temname=tem_name,temtime=tem_time,temtem=tem_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
     # humNo"感应器id"
     # humname"感应器名称"
@@ -35,7 +37,8 @@ class SetHistory:
             HumidityHistory.objects.create(humNo=hum_No,humname=hum_name,humtime=hum_time,humtem=hum_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
     # coNo"感应器id"
     # coname"感应器名称"
@@ -46,7 +49,8 @@ class SetHistory:
             COtHistory.objects.create(coNo=co_No,coname=co_name,cotime=co_time,cotem=co_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
     # pmNo"感应器id"
     # pmname"感应器名称"
@@ -57,7 +61,8 @@ class SetHistory:
             PMHistory.objects.create(pmNo=pm_No,pmname=pm_name,pmtime=pm_time,pmtem=pm_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
     # lightNo"感应器id"
     # lightname"感应器名称"
@@ -68,8 +73,14 @@ class SetHistory:
             LigthHistory.objects.create(lightNo=light_No,lightname=light_name,lighttime=light_time,lighttem=light_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        pass
+            return False
+        return True
 
+
+    # electNo"感应器id"
+    # electname"感应器名称"
+    # electttime"时间"
+    # electtem"电力使用"
     def setelect(self):
         pass
 

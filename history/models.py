@@ -82,4 +82,11 @@ class AccessHistory(models.Model):
         return self.detail
 
 
+class ElectHistory(models.Model):
+    electNo = models.CharField(verbose_name="感应器id", max_length=50, default='')
+    electname = models.CharField(verbose_name="感应器名称", max_length=50, default='')
+    electttime = models.DateTimeField(verbose_name="时间", default=timezone.now)
+    electtem = models.CharField(verbose_name="电力使用", max_length=50, default=0)
 
+    def __str__(self):
+        return self.electname
