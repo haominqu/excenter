@@ -1,6 +1,6 @@
 
-// base_url="http://192.168.188.239:8003";
-base_url="http://192.168.188.171:8000";
+base_url="http://192.168.188.239:8003";
+// base_url="http://192.168.188.171:8000";
 
 // base_url="http://192.168.188.171:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
