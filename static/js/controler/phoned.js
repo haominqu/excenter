@@ -284,7 +284,7 @@ $(function () {
         });
 
     }else {
-        location.href="/phone/";
+        // location.href="/phone/";
     }
 
 
