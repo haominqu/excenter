@@ -22,6 +22,7 @@ import time
 import os
 import shutil
 import socket
+from PIL import Image
 
 # Create your views here.
 
@@ -97,19 +98,27 @@ class UploadImage(APIView):
 
     @method_decorator(login_decorator)
     def post(self, request, **kwargs):
+        # phonesys = request.FILES.get("phonesys",'a')   # android iphone(顺90->270) wp
+        phonesys = request.META.get("HTTP_PHONESYS",'a')   # android iphone(顺90->270) wp
         face_picture = request.FILES.get('myfiles', '')
         file_type = face_picture.name.split('.')[1]
         time_stamp = int(round(time.time() * 1000))
         file_name = str(time_stamp) + '.' + file_type
         f = open(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name), 'wb')
         for chunk in face_picture.chunks():
-            f.write(chunk)
+                f.write(chunk)
         f.close()
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 80))
         ip = s.getsockname()[0]
-        file_path = "http://" + ip + ":8003" + "/media/tempory_m/"+file_name
-
+        file_path = "http://" + "39.106.16.34:8001" + "/media/tempory_m/"+file_name
+        im = Image.open(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name))
+        if phonesys == "android":
+            im_rotate = im.rotate(90)
+            im_rotate.save(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name))
+        elif phonesys == 'iphone':
+            im_rotate = im.rotate(270)
+            im_rotate.save(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name))
         result = True
         data = file_path
         error = ""

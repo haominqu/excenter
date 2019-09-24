@@ -1,6 +1,6 @@
 
-base_url="http://192.168.188.239:8003";
-// base_url="http://192.168.188.171:8000";
+// base_url="http://192.168.188.239:8003";
+base_url="http://39.106.16.34:8001";
 
 // base_url="http://192.168.188.171:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
@@ -25,12 +25,26 @@ $(function () {
     $("#file-input").on("change",function(){
         var form_data = new FormData();
         form_data.append('myfiles', this.files[0]);
+        var u = navigator.userAgent;
+        var phonesys="ABC";
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            phonesys="android";
+            localStorage.setItem("phonesys","android");
+        } else if (u.indexOf('iPhone') > -1) {          //苹果手机
+            phonesys="iphone";
+            localStorage.setItem("phonesys","iphone");
+        } else if (u.indexOf('Windows Phone') > -1) {           //winphone手机
+            phonesys="wp";
+            localStorage.setItem("phonesys","wp");
+        };
+
+        // form_data.append('phonesys', phonesys);
        $.ajax({
              url: invite_image_url,
              type: 'POST',
              data:form_data,
              timeout: 200000,
-             headers:{'Authorization':'hm JWT '+token},
+             headers:{'Authorization':'hm JWT '+token,'Phonesys':phonesys},
              processData: false,
              contentType: false,
 
@@ -107,6 +121,7 @@ $(function () {
                     position:position,
                     department:department,
                     face_picture:face_picture,
+
                 },
                 success:function (res) {
                     if(res.result==true){

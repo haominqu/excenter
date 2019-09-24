@@ -25,9 +25,9 @@ class TestFaceView(APIView):
 
     def get(self, request):
         guest_id = request.GET.get("guest_id", "")
-        add_face_result = FaceManage().face_regist(guest_id)
+        # add_face_result = FaceManage().face_regist(guest_id)
         yiti_face_result = YiTiFaceManage().face_regist(guest_id)
-        return JsonResponse({"result": add_face_result, "data": yiti_face_result, "error": add_face_result})
+        return JsonResponse({"result": yiti_face_result, "data": yiti_face_result, "error": yiti_face_result})
         # if add_face_result:
         #     result = True
         #     data = "注册成功"
