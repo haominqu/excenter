@@ -30,6 +30,7 @@ class UserInfo(models.Model):
     user_secret = models.CharField(verbose_name='用户JWT秘钥', max_length=200, default=uuid4())
     is_login = models.BooleanField(verbose_name='是否登录', default=False)
     uu_id = models.CharField(verbose_name='uuid', max_length=200, null=True, blank=True)
+    dh_id = models.CharField(verbose_name='dhid', max_length=200, null=True, blank=True)
 
 
     def __str__(self):

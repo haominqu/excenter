@@ -2,8 +2,6 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'test/dhface/$', TestFaceView.as_view(), name='test_face'),
-    # url(r'add/dhface/$', FaceManage.as_view(), name='face_manage'),
-
-
+    url(r'accesscontrol/dhface/$', AccessControlFaceView.as_view(), name='accesscontrol_face'),
+    url(r'yiti/dhface/$', YiTiFaceView.as_view(), name='yiti_face'),
 ]

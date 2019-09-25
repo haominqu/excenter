@@ -16,6 +16,7 @@ from userinfo.permissions import IsAdmin, login_decorator
 from excenteron.settings import BASE_URL
 from machine.models import *
 from userinfo.fourrandom import generate_code
+from face.dhface import AccessControlFaceManage, YiTiFaceManage
 
 # base
 import logging
@@ -288,10 +289,24 @@ class AccountActive(APIView):
             staff[0].save()
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        result = True
-        data = ""
-        error = "状态更改成功"
-        return JsonResponse({"result": result, "data": data, "error": error})
+        if staff[0].is_active == 1:
+            add_face_result = AccessControlFaceManage().staff_face_regist(staff_id)
+            yiti_face_result = YiTiFaceManage().staff_face_regist(staff_id)
+            if add_face_result == 0 and yiti_face_result == 0:
+                result = True
+                data = "激活成功"
+                error = ""
+                return JsonResponse({"result": result, "data": data, "error": error})
+            else:
+                result = False
+                data = ""
+                error = "人脸特征提取失败, 激活失败"
+                return JsonResponse({"result": result, "data": data, "error": error})
+        else:
+            result = True
+            data = ""
+            error = "状态更改成功"
+            return JsonResponse({"result": result, "data": data, "error": error})
 
 
 class GuestList(APIView):
@@ -410,10 +425,24 @@ class GuestActive(APIView):
             data = ""
             error = "状态更改失败"
             return JsonResponse({"result": result, "data": data, "error": error})
-        result = True
-        data = ""
-        error = "状态更改成功"
-        return JsonResponse({"result": result, "data": data, "error": error})
+        if guest[0].is_active == 1:
+            add_face_result = AccessControlFaceManage().face_regist(guest_id)
+            yiti_face_result = YiTiFaceManage().face_regist(guest_id)
+            if add_face_result == 0 and yiti_face_result == 0:
+                result = True
+                data = "激活成功"
+                error = ""
+                return JsonResponse({"result": result, "data": data, "error": error})
+            else:
+                result = False
+                data = ""
+                error = "人脸特征提取失败, 激活失败"
+                return JsonResponse({"result": result, "data": data, "error": error})
+        else:
+            result = True
+            data = ""
+            error = "状态更改成功"
+            return JsonResponse({"result": result, "data": data, "error": error})
 
 
 class AccountInPwdView(APIView):
