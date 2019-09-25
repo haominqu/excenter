@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-from face.views import TestFaceView
+from face.views import AccessControlFaceView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -46,6 +46,6 @@ urlpatterns = [
 
 
 
-    url(r'service', TestFaceView.as_view(), name='service'),
+    url(r'service', AccessControlFaceView.as_view(), name='service'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

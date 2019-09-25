@@ -8,7 +8,7 @@ from django.conf import settings
 
 # self_project
 from userinfo.models import UserInfo, Guest, UserDetail
-from .dhface import FaceManage, YiTiFaceManage
+from .dhface import AccessControlFaceManage, YiTiFaceManage
 
 # base
 import logging
@@ -21,30 +21,44 @@ import os
 # Create your views here.
 
 
-class TestFaceView(APIView):
+class AccessControlFaceView(APIView):
 
     def get(self, request):
-        guest_id = request.GET.get("guest_id", "")
-        # add_face_result = FaceManage().face_regist(guest_id)
-        yiti_face_result = YiTiFaceManage().face_regist(guest_id)
-        return JsonResponse({"result": yiti_face_result, "data": yiti_face_result, "error": yiti_face_result})
-        # if add_face_result:
-        #     result = True
-        #     data = "注册成功"
-        #     error = ""
-        #     return JsonResponse({"result": result, "data": data, "error": error})
-        # else:
-        #     result = False
-        #     data = ""
-        #     error = "注册失败"
-        #     return JsonResponse({"result": result, "data": data, "error": error})
+        pass
 
-    def post(self,request):
-        a=request.POST.get("action")
-        b=request.POST.get("faceid")
-        c=request.POST.get("time")
-        # d=request.POST.get("")
-        print(a,b,c)
+
+    def post(self, request):
+        guest_id = request.POST.get("guest_id", "")
+        add_face_result = AccessControlFaceManage().face_regist(guest_id)
+        if add_face_result == 0:
+            result = True
+            data = "注册人脸成功"
+            error = ""
+        else:
+            result = False
+            data = ""
+            error = "特征提取失败"
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
+class YiTiFaceView(APIView):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        guest_id = request.POST.get("guest_id", "")
+        yiti_face_result = YiTiFaceManage().face_regist(guest_id)
+        if yiti_face_result == 0:
+            result = True
+            data = "注册人脸成功"
+            error = ""
+        else:
+            result = False
+            data = ""
+            error = "特征提取失败"
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
 
 
 
