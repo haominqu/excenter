@@ -11,6 +11,7 @@ var change_pwd_url = base_url + "";
 var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
 var ctr_mac_url_curtain = base_url + "/onlinemac/curtain/";
+var ctr_mac_url_air = base_url + "/onlinemac/air/";
 
 var  ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
@@ -19,6 +20,7 @@ var token = localStorage.getItem("token");
 
 
 $(function () {
+
     if(token!=null){
         var username = localStorage.getItem("username");
         var userid = localStorage.getItem("userid");
@@ -31,8 +33,9 @@ $(function () {
         };
         socket.onmessage = function (e) {
             var bdata = $.parseJSON(e.data);
+            console.log(bdata);
             if(bdata.mac_type==1){
-                console.log("####",bdata);
+                console.log(bdata);
 
                 $("input[_mid='"+bdata.mac_id+"']").attr("disabled",false);
                 if(bdata.mac_st==1){
@@ -50,31 +53,62 @@ $(function () {
                    $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_mac(1,'+bdata.mac_id+')');
                 };
             }else if(bdata.mac_type==2){
-                console.log();
+                // console.log(bdata);
                 // 光感
                 if(bdata.mac_sty=='19'){
                     console.log(bdata.mac_st);
                     $('#light').text(bdata.mac_st);
                 }else if(bdata.mac_sty=="42"){
                     $('#co2').text(bdata.mac_st);
+                }else if(bdata.mac_sty=="17"){
+                    if(bdata.mac_kind=="hu"){
+                        $('#humidity').text(bdata.mac_st);
+                    }else {
+
+                       $('#temperature').text(bdata.mac_st);
+                    }
+
+
+                }else if(bdata.mac_sty=="Ai"){
+                    $('#elect').text(bdata.mac_st);
+                }else if(bdata.mac_sty=="44"){
+                    $('#pm25').text(bdata.mac_st);
                 }else if(bdata.mac_sty=="Ar"){
+
                     // 窗帘
                     console.log("a"+bdata.mac_st);
                      $("input[_mid='"+bdata.mac_id+"']").attr("disabled",false);
-                if(bdata.mac_st==100){
+                    if(bdata.mac_st==100){
 
-                   $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp2.png");
-                   $("input[_mid='"+bdata.mac_id+"']").val("关");
-                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
-                   $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(0,'+bdata.mac_id+')');
-                }else {
-                   $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/lamp.png");
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/aropen.png");
+                       $("input[_mid='"+bdata.mac_id+"']").val("关");
+                       $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
+                       $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(0,'+bdata.mac_id+')');
+                    }else {
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/arclose.png");
 
-                   $("input[_mid='"+bdata.mac_id+"']").val("开");
-                   $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
+                       $("input[_mid='"+bdata.mac_id+"']").val("开");
+                       $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
 
-                   $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(1,'+bdata.mac_id+')');
-                };
+                       $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_ar_mac(1,'+bdata.mac_id+')');
+                    };
+                }else if(bdata.mac_sty=="Af"){
+                    $("input[_mid='"+bdata.mac_id+"']").attr("disabled",false);
+
+                    if(bdata.mac_st==1){
+
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/aropen.png");
+                       $("input[_mid='"+bdata.mac_id+"']").val("关");
+                       $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
+                       $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_af_mac(0,'+bdata.mac_id+')');
+                    }else {
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/arclose.png");
+
+                       $("input[_mid='"+bdata.mac_id+"']").val("开");
+                       $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
+
+                       $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_af_mac(1,'+bdata.mac_id+')');
+                    };
                 }
 
 
@@ -171,6 +205,12 @@ $(function () {
                             showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/arclose.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }else {
                             showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/aropen.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_ar_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }
+                    }else if(data[index].mac.mac_type=="Af"){
+                        if(data[index].mac_status==0){
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/arclose.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                        }else {
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/aropen.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }
                     }
 
@@ -317,7 +357,7 @@ function ctr_mac(mac_st,mac_id) {
 
 }
 
-// 开关灯点击
+// 开关窗帘点击
 function ctr_ar_mac(mac_st,mac_id) {
     $.ajax({
         url:ctr_mac_url_curtain,
@@ -341,3 +381,25 @@ function ctr_ar_mac(mac_st,mac_id) {
 }
 
 
+// 开关窗帘点击
+function ctr_af_mac(mac_st,mac_id) {
+    $.ajax({
+        url:ctr_mac_url_air,
+        type:'get',
+        dataType:'json',
+        headers:{'Authorization':'JWT '+token},
+        data:{
+            mac_id:mac_id,
+            mac_st:mac_st,
+        },
+        success:function (res) {
+            $("input[_mid='"+mac_id+"']").attr("disabled",true);
+            return false
+
+        },
+        error:function (error) {
+            return false
+        }
+    })
+
+}
