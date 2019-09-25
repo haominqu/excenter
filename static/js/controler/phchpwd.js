@@ -61,7 +61,8 @@ $(function () {
                     c_pwd:cnewpwd,
                 },
                 success:function (res) {
-                    location.href="/phoned/";
+                    location.href="/phoned/"; startColor
+                    
                 },
                 error:function (error) {
 

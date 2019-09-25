@@ -26,7 +26,9 @@ $(function () {
         var form_data = new FormData();
         form_data.append('myfiles', this.files[0]);
         var u = navigator.userAgent;
-        var phonesys="ABC";
+
+        var phonesys="";
+
         if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
             phonesys="android";
             localStorage.setItem("phonesys","android");
@@ -36,14 +38,17 @@ $(function () {
         } else if (u.indexOf('Windows Phone') > -1) {           //winphone手机
             phonesys="wp";
             localStorage.setItem("phonesys","wp");
+
         };
 
         // form_data.append('phonesys', phonesys);
+
        $.ajax({
              url: invite_image_url,
              type: 'POST',
              data:form_data,
              timeout: 200000,
+
              headers:{'Authorization':'hm JWT '+token,'Phonesys':phonesys},
              processData: false,
              contentType: false,

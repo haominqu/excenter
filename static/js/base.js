@@ -3,7 +3,7 @@ function fnW(str) {
     str >= 10 ? num = str : num = "0" + str;
     return num;
 }
-//获取当前时间
+//获取当前时间 b
 var timer = setInterval(function () {
     var date = new Date();
     var year = date.getFullYear(); //当前年份
@@ -19,7 +19,7 @@ var timer = setInterval(function () {
 
 }, 1000)
 
-var base_url = "http://localhost:8003/";
+var base_url = "http://192.168.188.171:8000/";
 var hm_first_data_url = base_url+"screen/regist/number/";
 var hm_secound_data_url = base_url+"screen/temhum/data/";
 var hm_third_data_url = base_url+"screen/pmco/data/";
