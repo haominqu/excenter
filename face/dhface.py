@@ -17,7 +17,7 @@ class AccessControlFaceManage():
         url = "http://10.11.30.89:25000/service"
         action = "addface"
         guest = Guest.objects.filter(user_id=guest_id)
-        faceid = int(str(guest[0].id) + generate_code())
+        faceid = int(str(guest[0].id))
         realname = guest[0].realname
         face_db_path = guest[0].face_picture
         face_path = "/media" + str(face_db_path)
@@ -39,7 +39,7 @@ class AccessControlFaceManage():
         url = "http://10.11.30.89:25000/service"
         action = "addface"
         guest = UserDetail.objects.filter(user_id=staff_id)
-        faceid = int(str(guest[0].id) + generate_code())
+        faceid = int(str(guest[0].id))
         realname = guest[0].realname
         face_db_path = guest[0].face_picture
         face_path = "/media" + str(face_db_path)
@@ -75,14 +75,16 @@ class AccessControlFaceManage():
 
 
     def face_delete(self, face_id):
+        print("AAAAAAA")
         url = "http://10.11.30.89:25000/service"
         action = "del"
         payload = {'action': action, 'faceid':face_id}
         response = requests.post(url=url, data=payload)
         response.encoding = 'utf-8-sig'
         res_status = json.loads(response.text)['status']
+        print(response.text)
         if res_status == 0:
-            UserInfo.objects.filter(id=guest[0].user_id).update(dh_id=None)
+            UserInfo.objects.filter(dh_id=face_id).update(dh_id=None)
             return 0
         else:
             return res_status
@@ -95,7 +97,7 @@ class YiTiFaceManage():
         url = "http://10.11.30.91:25000/service"
         action = "addface"
         guest = Guest.objects.filter(user_id=guest_id)
-        faceid = int(str(guest[0].id) + generate_code())
+        faceid = int(str(guest[0].id))
         realname = guest[0].realname
         face_db_path = guest[0].face_picture
         face_path = "/media" + str(face_db_path)
@@ -118,7 +120,7 @@ class YiTiFaceManage():
         action = "addface"
         guest = UserDetail.objects.filter(user_id=staff_id)
         print(len(guest))
-        faceid = int(str(guest[0].id) + generate_code())
+        faceid = int(str(guest[0].id))
         realname = guest[0].realname
         face_db_path = guest[0].face_picture
         face_path = "/media" + str(face_db_path)
@@ -163,7 +165,7 @@ class YiTiFaceManage():
         response.encoding = 'utf-8-sig'
         res_status = json.loads(response.text)['status']
         if res_status == 0:
-            UserInfo.objects.filter(id=guest[0].user_id).update(dh_id=None)
+            UserInfo.objects.filter(dh_id=face_id).update(dh_id=None)
             return 0
         else:
             return res_status

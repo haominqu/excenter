@@ -24,7 +24,9 @@ import os
 class AccessControlFaceView(APIView):
 
     def get(self, request):
-        pass
+        access_face_list = AccessControlFaceManage().get_face_list()
+        return JsonResponse({"result": access_face_list, "data": access_face_list, "error": access_face_list})
+
 
 
     def post(self, request):
@@ -39,6 +41,10 @@ class AccessControlFaceView(APIView):
             data = ""
             error = "特征提取失败"
         return JsonResponse({"result": result, "data": data, "error": error})
+    
+    def delete(self, request):
+        member_clear = AccessControlFaceManage().member_clear()
+        return JsonResponse({"result": member_clear, "data": member_clear, "error": member_clear})
 
 
 class YiTiFaceView(APIView):
@@ -62,9 +68,6 @@ class YiTiFaceView(APIView):
     def delete(self, request):
         member_clear = YiTiFaceManage().member_clear()
         return JsonResponse({"result": member_clear, "data": member_clear, "error": member_clear})
-
-
-
 
 
 

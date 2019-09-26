@@ -32,9 +32,9 @@ class SetHistory:
     # humname"感应器名称"
     # humtime"湿度时间"
     # humtem"湿度"
-    def sethumidity(self,hum_No,hum_name,hum_time,hum_tem):
+    def sethumidity(self,hum_No,hum_name,hum_tem):
         try:
-            HumidityHistory.objects.create(humNo=hum_No,humname=hum_name,humtime=hum_time,humtem=hum_tem)
+            HumidityHistory.objects.create(humNo=hum_No,humname=hum_name,humtem=hum_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             return False

@@ -48,10 +48,10 @@ class ReciveMessage:
                     endpointNumber2 = mac_detail['endpoints'][1]['endpointNumber']
                     attributeValue2 = mac_detail['endpoints'][1]['clusters'][0]['attributes'][0]['attributeValue']
                     mac2 = Machine.objects.filter(mac_devID=devID)
-
+                    print(mac2[0])
                     if mac2:
-                        now_mc2 = ControlMac.objects.filter(mac=mac2[1], endpointnum=endpointNumber2)
-                        print(len(now_mc2))
+                        now_mc2 = ControlMac.objects.filter(mac=mac2[0], endpointnum=endpointNumber2)
+                        print(endpointNumber2)
                         print(attributeValue2)
                         now_mc2.update(temperature=attributeValue2)
                     # if mac_detail['type'] == '19':
@@ -66,7 +66,7 @@ class ReciveMessage:
                     backdatat['mac_kind'] = "hu"
                     backdatat['mac_type'] = '2'
 
-                    send_web_msg('', str(backdatat).replace('\'', '\"'))
+                    
                     tem_No = mac2[1].id
                     tem_name = mac2[1].mac_name
                     tem_tem = attributeValue2
@@ -74,11 +74,14 @@ class ReciveMessage:
 
                     endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
                     attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
-                    mac = Machine.objects.filter(mac_devID=devID)
-                    if mac:
-
-                        now_mc = ControlMac.objects.filter(mac=mac[0],endpointnum=endpointNumber)
+                    print("@@@@@@@@@@@@@@@@@@")
+                    print(len(mac2))
+                    if mac2:
+                        print(endpointNumber)
+                        print(attributeValue)
+                        now_mc = ControlMac.objects.filter(mac=mac2[1],endpointnum=endpointNumber)
                         now_mc.update(temperature=attributeValue)
+
                     # if mac_detail['type'] == '19':
 
                     backdata = {}
@@ -88,11 +91,43 @@ class ReciveMessage:
                     backdata['mac_kind'] = now_mc[0].mac.kind
                     backdata['mac_type'] = '2'
                     print("@@@@@@###$$")
-                    send_web_msg('', str(backdata).replace('\'', '\"'))
                     tem_No = mac[0].id
                     tem_name = mac[0].mac_name
                     tem_tem = attributeValue
                     sethistory.SetHistory().settempracure(tem_No, tem_name, tem_tem)
+
+                    send_web_msg('', str(backdatat).replace('\'', '\"'))
+                    send_web_msg('', str(backdata).replace('\'', '\"'))
+
+                if thire_type=="19":
+                    print("@@@@")
+                    endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
+                    attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
+                    mac = Machine.objects.filter(mac_devID=devID)
+                    print(len(mac))
+                    print(mac[0].id)
+                    if mac:
+                        now_mc = ControlMac.objects.filter(mac=mac[0], endpointnum=endpointNumber)
+                        now_mc.update(temperature=attributeValue)
+                    # if mac_detail['type'] == '19':
+                    backdata = {}
+                    backdata["mac_id"] = now_mc[0].mac.id
+                    backdata["mac_sty"] = now_mc[0].mac.mac_type
+                    backdata['mac_st'] = now_mc[0].temperature
+                    backdata['mac_kind'] = now_mc[0].mac.kind
+                    backdata['mac_type'] = '2'
+                    print("@@@@@@###$$")
+                    send_web_msg('', str(backdata).replace('\'', '\"'))
+                    # coNo"感应器id"
+                    # coname"感应器名称"
+                    # cotime"CO2时间"
+                    # cotem"co2度"
+                    lightNo = mac[0].id
+                    lightname = mac[0].mac_name
+                    lighttem = attributeValue
+                    sethistory.SetHistory().setlight(lightNo, lightname, lighttem)
+
+
 
                 if thire_type=="44":
                     endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
