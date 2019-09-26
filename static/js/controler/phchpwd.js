@@ -1,14 +1,32 @@
 
-base_url="http://192.168.188.239:8003";
-// base_url="http://192.168.188.171:8000";
-
-// base_url="http://192.168.188.171:8000";
+base_url="http://10.11.30.52:8000";
 var login_url = base_url + "/userinfo/staff_guest/login/";
 var lamp_url = base_url + "";
 var curtain_url = base_url + "";
 var air_url = base_url + "";
 var change_pwd_url = base_url + "/userinfo/alter/pwd/";
 var token = localStorage.getItem("token");
+
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+
 $(function () {
     if(token==null){
         location.href="/phone/";
@@ -59,6 +77,7 @@ $(function () {
                     old_pwd:oldpwd,
                     new_pwd:newpwd,
                     c_pwd:cnewpwd,
+                    csrfmiddlewaretoken:csrftoken,
                 },
                 success:function (res) {
                     location.href="/phoned/"; startColor

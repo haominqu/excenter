@@ -223,19 +223,21 @@ class StaffManageView(APIView):
             data = ""
             error = ""
             return JsonResponse({"result": result, "data": data, "error": error})
-        try:
+        face_id = user[0].dh_id
+        face_del_m = AccessControlFaceManage().face_delete(face_id)
+        face_del_yiti = YiTiFaceManage().face_delete(face_id)
+        if face_del_m == 0 and face_del_yiti == 0:
             user[0].delete()
-        except ObjectDoesNotExist as e:
-            logging.warning(e)
+            result = True
+            data = ""
+            error = "删除成功"
+            return JsonResponse({"result": result, "data": data, "error": error})
+        else:
             result = False
             data = ""
             error = "删除失败"
             return JsonResponse({"result": result, "data": data, "error": error})
-        result = True
-        data = ""
-        error = "删除成功"
-        return JsonResponse({"result": result, "data": data, "error": error})
-
+        
 
 
 class StaffList(APIView):
@@ -289,7 +291,7 @@ class AccountActive(APIView):
             staff[0].save()
         except ObjectDoesNotExist as e:
             logging.warning(e)
-        if staff[0].is_active == 1:
+        if staff[0].is_active == "1":
             add_face_result = AccessControlFaceManage().staff_face_regist(staff_id)
             yiti_face_result = YiTiFaceManage().staff_face_regist(staff_id)
             if add_face_result == 0 and yiti_face_result == 0:
@@ -303,10 +305,22 @@ class AccountActive(APIView):
                 error = "人脸特征提取失败, 激活失败"
                 return JsonResponse({"result": result, "data": data, "error": error})
         else:
-            result = True
-            data = ""
-            error = "状态更改成功"
-            return JsonResponse({"result": result, "data": data, "error": error})
+            face_id = staff[0].dh_id
+            face_del_m = AccessControlFaceManage().face_delete(face_id)
+            face_del_yiti = YiTiFaceManage().face_delete(face_id)
+            if face_del_m == 0 and face_del_yiti == 0:
+                result = True
+                data = ""
+                error = "状态更改成功"
+                return JsonResponse({"result": result, "data": data, "error": error})
+            else:
+                staff[0].is_active = 2
+                staff[0].save()
+                result = False
+                data = ""
+                error = "状态更改失败, 用户被锁定"
+                return JsonResponse({"result": result, "data": data, "error": error})
+
 
 
 class GuestList(APIView):
@@ -425,7 +439,7 @@ class GuestActive(APIView):
             data = ""
             error = "状态更改失败"
             return JsonResponse({"result": result, "data": data, "error": error})
-        if guest[0].is_active == 1:
+        if guest[0].is_active == "1":
             add_face_result = AccessControlFaceManage().face_regist(guest_id)
             yiti_face_result = YiTiFaceManage().face_regist(guest_id)
             if add_face_result == 0 and yiti_face_result == 0:
@@ -439,10 +453,23 @@ class GuestActive(APIView):
                 error = "人脸特征提取失败, 激活失败"
                 return JsonResponse({"result": result, "data": data, "error": error})
         else:
-            result = True
-            data = ""
-            error = "状态更改成功"
-            return JsonResponse({"result": result, "data": data, "error": error})
+            face_id = guest[0].dh_id
+            face_del_m = AccessControlFaceManage().face_delete(face_id)
+            face_del_yiti = YiTiFaceManage().face_delete(face_id)
+            if face_del_m == 0 and face_del_yiti == 0:
+                result = True
+                data = ""
+                error = "状态更改成功"
+                return JsonResponse({"result": result, "data": data, "error": error})
+            else:
+                guest[0].is_active = 2
+                guest[0].save()
+                result = False
+                data = ""
+                error = "状态更改失败, 用户被锁定"
+                return JsonResponse({"result": result, "data": data, "error": error})
+
+
 
 
 class AccountInPwdView(APIView):

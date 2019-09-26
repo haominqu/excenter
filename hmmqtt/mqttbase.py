@@ -134,7 +134,7 @@ client = mqtt.Client(client_id="mqtt_hm", clean_session=False)
 def mqtt_run():
     client.on_connect = on_connect
     client.on_message = on_message
-    broker = '192.168.188.171'
+    broker = '10.11.30.52'  
     client.connect(broker, 1883, 62)
     client.username_pw_set('', '')
     client.reconnect_delay_set(min_delay=1, max_delay=2000)

@@ -56,6 +56,37 @@ class AccessControlFaceManage():
         else:
             return res_status
 
+    def get_face_list(self):
+        url = "http://10.11.30.89:25000/service"
+        action = "regedfacelist"
+        payload = {'action': action}
+        response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
+        return response.text
+
+    def member_clear(self):
+        url = "http://10.11.30.89:25000/service"
+        action = "clearface"
+        payload = {'action': action}
+        response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
+        res_status = json.loads(response.text)['status']
+        return response.text
+
+
+    def face_delete(self, face_id):
+        url = "http://10.11.30.89:25000/service"
+        action = "del"
+        payload = {'action': action, 'faceid':face_id}
+        response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
+        res_status = json.loads(response.text)['status']
+        if res_status == 0:
+            UserInfo.objects.filter(id=guest[0].user_id).update(dh_id=None)
+            return 0
+        else:
+            return res_status
+
 
 
 class YiTiFaceManage():
@@ -83,9 +114,10 @@ class YiTiFaceManage():
             return res_status
 
     def staff_face_regist(self, staff_id):
-        url = "http://10.11.30.89:25000/service"
+        url = "http://10.11.30.91:25000/service"
         action = "addface"
         guest = UserDetail.objects.filter(user_id=staff_id)
+        print(len(guest))
         faceid = int(str(guest[0].id) + generate_code())
         realname = guest[0].realname
         face_db_path = guest[0].face_picture
@@ -97,6 +129,7 @@ class YiTiFaceManage():
         response = requests.post(url=url, data=payload)
         response.encoding = 'utf-8-sig'
         res_status = json.loads(response.text)['status']
+        print(response.text)
         if res_status == 0:
             UserInfo.objects.filter(id=guest[0].user_id).update(dh_id=faceid)
             return 0
@@ -104,12 +137,75 @@ class YiTiFaceManage():
             return res_status
 
 
-    def get_face(self):
+    def get_face_list(self):
         url = "http://10.11.30.91:25000/service"
         action = "regedfacelist"
         payload = {'action': action}
         response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
         return response.text
 
-    def face_delete(self, guest_id):
-        pass
+    def member_clear(self):
+        url = "http://10.11.30.91:25000/service"
+        action = "clearface"
+        payload = {'action': action}
+        response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
+        res_status = json.loads(response.text)['status']
+        return response.text
+
+
+    def face_delete(self, face_id):
+        url = "http://10.11.30.91:25000/service"
+        action = "del"
+        payload = {'action': action, 'faceid':face_id}
+        response = requests.post(url=url, data=payload)
+        response.encoding = 'utf-8-sig'
+        res_status = json.loads(response.text)['status']
+        if res_status == 0:
+            UserInfo.objects.filter(id=guest[0].user_id).update(dh_id=None)
+            return 0
+        else:
+            return res_status
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

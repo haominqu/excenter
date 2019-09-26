@@ -248,4 +248,26 @@ class MacModeView(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
+class M_Data(APIView):
+
+    def get(self, request):
+        tem = ControlMac.objects.filter(mac__kind=2)
+        sd = ControlMac.objects.filter(mac__kind=3)
+        gz = ControlMac.objects.filter(mac__kind=4)
+        co = ControlMac.objects.filter(mac__kind=5)
+        dl = ControlMac.objects.filter(mac__kind=6)
+        pm = ControlMac.objects.filter(mac__kind=7)
+        data = {}
+        data['tem'] = tem[0].temperature
+        data['sd'] = sd[0].temperature
+        data['gz'] = gz[0].temperature
+        data['co'] = co[0].temperature
+        data['dl'] = dl[0].temperature
+        data['pm'] = pm[0].temperature
+        result = True
+        data = data
+        error = ""
+        return JsonResponse({"result": result, "data": data, "error": error})
+
+
 
