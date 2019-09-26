@@ -270,4 +270,3 @@ class M_Data(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
-

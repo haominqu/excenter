@@ -1,5 +1,8 @@
 
+
 base_url="http://10.11.30.52:8000";
+
+
 var login_url = base_url + "";
 var lamp_url = base_url + "";
 var curtain_url = base_url + "";
@@ -9,7 +12,7 @@ var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
 var ctr_mac_url_curtain = base_url + "/onlinemac/curtain/";
 var ctr_mac_url_air = base_url + "/onlinemac/air/";
-
+var base_show_url = base_url + "/onlinemac/index/data";
 var  ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
 
@@ -133,6 +136,33 @@ $(function () {
 
 
         };
+
+        //基础感应器数据
+        $.ajax({
+            url:base_show_url,
+            type:'get',
+            dataType:'json',
+            headers:{'Authorization':'hm JWT '+token},
+            data:{
+            },
+            success:function (res) {
+                // console.log("***res");
+                datas = res.data
+                $('#co2').text(datas.co);
+                $('#light').text(datas.gz);
+                $('#pm25').text(datas.pm);
+                $('#elect').text(datas.dl.toString());
+                $('#temperature').text(datas.tem);
+                $('#humidity').text(datas.sd);
+
+                },
+            error:function (error) {
+
+            }
+        });
+
+
+
 
         // 基础信息
         $("span[name='realname']").text(username);
