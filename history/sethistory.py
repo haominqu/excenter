@@ -20,9 +20,9 @@ class SetHistory:
     # temname"感应器名称"
     # temtime"温度时间"
     # temtem"温度"
-    def settempracure(self,tem_No,tem_name,tem_time,tem_tem):
+    def settempracure(self,tem_No,tem_name,tem_tem):
         try:
-            TemperatureHistory.objects.create(temNo=tem_No,temname=tem_name,temtime=tem_time,temtem=tem_tem)
+            TemperatureHistory.objects.create(temNo=tem_No,temname=tem_name,temtem=tem_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             return False
@@ -44,9 +44,10 @@ class SetHistory:
     # coname"感应器名称"
     # cotime"CO2时间"
     # cotem"co2度"
-    def setcot(self,co_No,co_name,co_time,co_tem):
+    def setcot(self,co_No,co_name,co_tem):
+
         try:
-            COtHistory.objects.create(coNo=co_No,coname=co_name,cotime=co_time,cotem=co_tem)
+            COtHistory.objects.create(coNo=co_No,coname=co_name,cotem=co_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             return False
@@ -56,9 +57,10 @@ class SetHistory:
     # pmname"感应器名称"
     # pmtime"PM2.5时间"
     # pmtem"PM2.5度"
-    def setpm(self,pm_No,pm_name,pm_time,pm_tem):
+    def setpm(self,pm_No,pm_name,pm_tem):
+
         try:
-            PMHistory.objects.create(pmNo=pm_No,pmname=pm_name,pmtime=pm_time,pmtem=pm_tem)
+            PMHistory.objects.create(pmNo=pm_No,pmname=pm_name,pmtem=pm_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             return False
@@ -68,9 +70,9 @@ class SetHistory:
     # lightname"感应器名称"
     # lighttime"光照时间"
     # lighttem"光照强度"
-    def setlight(self,light_No,light_name,light_time,light_tem):
+    def setlight(self,light_No,light_name,light_tem):
         try:
-            LigthHistory.objects.create(lightNo=light_No,lightname=light_name,lighttime=light_time,lighttem=light_tem)
+            LigthHistory.objects.create(lightNo=light_No,lightname=light_name,lighttem=light_tem)
         except ObjectDoesNotExist as e:
             logging.warning(e)
             return False
@@ -81,8 +83,13 @@ class SetHistory:
     # electname"感应器名称"
     # electttime"时间"
     # electtem"电力使用"
-    def setelect(self):
-        pass
+    def setelect(self,electNo,electname,electtem):
+        try:
+            ElectHistory.objects.create(electNo=electNo,electname=electname,  electtem=electtem)
+        except ObjectDoesNotExist as e:
+            logging.warning(e)
+            return False
+        return True
 
     def setinvite(self):
         InviteHistory.objects.create()
