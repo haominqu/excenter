@@ -281,6 +281,34 @@ class ReciveMessage:
 
                     sethistory.SetHistory().setpm(pmNo, pmname, pmtem)
 
+                if thire_type=="19":
+                    print("@@@@")
+                    endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
+                    attributeValue = mac_detail['endpoints'][0]['clusters'][0]['attributes'][0]['attributeValue']
+                    mac = Machine.objects.filter(mac_devID=devID)
+                    print(len(mac))
+                    print(mac[0].id)
+                    if mac:
+                        now_mc = ControlMac.objects.filter(mac=mac[0], endpointnum=endpointNumber)
+                        now_mc.update(temperature=attributeValue)
+                    # if mac_detail['type'] == '19':
+                    backdata = {}
+                    backdata["mac_id"] = now_mc[0].mac.id
+                    backdata["mac_sty"] = now_mc[0].mac.mac_type
+                    backdata['mac_st'] = now_mc[0].temperature
+                    backdata['mac_kind'] = now_mc[0].mac.kind
+                    backdata['mac_type'] = '2'
+                    print("@@@@@@###$$")
+                    send_web_msg('', str(backdata).replace('\'', '\"'))
+                    # coNo"感应器id"
+                    # coname"感应器名称"
+                    # cotime"CO2时间"
+                    # cotem"co2度"
+                    lightNo = mac[0].id
+                    lightname = mac[0].mac_name
+                    lighttem = attributeValue
+                    sethistory.SetHistory().setlight(lightNo, lightname, lighttem)
+
                 if thire_type=="42":
                     print("@@@@")
                     endpointNumber = mac_detail['endpoints'][0]['endpointNumber']
