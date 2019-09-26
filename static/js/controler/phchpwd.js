@@ -62,7 +62,7 @@ $(function () {
                 },
                 success:function (res) {
                     location.href="/phoned/"; startColor
-                    
+
                 },
                 error:function (error) {
 

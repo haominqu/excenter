@@ -12,7 +12,7 @@ var ctr_mac_list = base_url + "/onlinemac/controllm/list/";
 var ctr_mac_url = base_url + "/onlinemac/lamp/";
 var ctr_mac_url_curtain = base_url + "/onlinemac/curtain/";
 var ctr_mac_url_air = base_url + "/onlinemac/air/";
-
+var base_show_url = base_url + "";
 var  ctr_mac_atmt = base_url + "/onlinemac/mac/mode/";
 var token = localStorage.getItem("token");
 

@@ -248,4 +248,3 @@ class MacModeView(APIView):
         return JsonResponse({"result": result, "data": data, "error": error})
 
 
-
