@@ -1,6 +1,6 @@
-// base_url="http://192.168.188.171:8000";
 
-base_url="http://192.168.221.151:8000";
+base_url="http://10.11.30.52:8000";
+
 // base_url="http://192.168.188.171:8000";
 
 // base_url="http://192.168.188.171:8000";
@@ -10,6 +10,25 @@ var lamp_url = base_url + "";
 var curtain_url = base_url + "";
 var air_url = base_url + "";
 var change_pwd_url = base_url + "";
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
 
 $(function () {
     //登录
@@ -44,7 +63,8 @@ $(function () {
                 dataType:'json',
                 data:{
                     user_name:username,
-                    password:password
+                    password:password,
+                    csrfmiddlewaretoken:csrftoken,
                 },
                 success:function (res) {
                         console.log(res);

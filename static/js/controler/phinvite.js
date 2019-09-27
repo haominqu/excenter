@@ -1,12 +1,28 @@
 
-// base_url="http://192.168.188.239:8003";
-base_url="http://192.168.221.151:8000";
-
-// base_url="http://192.168.188.171:8000";
+base_url="http://10.11.30.52:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
 var invite_add_url = base_url + "/staff/guest/manage/";
 var invite_image_url = base_url + "/staff/upload/image/";
 var token = localStorage.getItem("token");
+
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
 
 $(function () {
     if(token==null){
@@ -25,6 +41,7 @@ $(function () {
     $("#file-input").on("change",function(){
         var form_data = new FormData();
         form_data.append('myfiles', this.files[0]);
+        form_data.append('csrfmiddlewaretoken', csrftoken);
         var u = navigator.userAgent;
 
         var phonesys="";
@@ -126,6 +143,7 @@ $(function () {
                     position:position,
                     department:department,
                     face_picture:face_picture,
+                    csrfmiddlewaretoken:csrftoken,
 
                 },
                 success:function (res) {

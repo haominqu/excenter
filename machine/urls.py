@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'machine/active/$', MachineActive.as_view(), name='machine_active'),  # 设备激活、停用
     url(r'alter/mac_name/$', AlterMachineName.as_view(), name='alter_mac_name'),  # 修改设备名称
     url(r'mac/mode/$', MacModeView.as_view(), name='mac_mode'),  # 设备模式
+    url(r'index/data/$', M_Data.as_view(), name='index_data'),
 
 ]
