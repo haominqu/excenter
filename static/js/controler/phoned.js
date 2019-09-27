@@ -2,7 +2,7 @@
 // base_url="http://192.168.188.239:8003";
 base_url="http://10.11.30.52:8000";
 
-// base_url="http://192.168.188.171:8000";
+// base_url="http://192.168.22.72:8000";
 var login_url = base_url + "";
 var lamp_url = base_url + "";
 var curtain_url = base_url + "";
