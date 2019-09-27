@@ -55,6 +55,7 @@ class AccessHistoryView(APIView):
 
     def get(self, request, *args, **kwargs):
         history = AccessHistory.objects.all()
+        print(history)
         history_se = AccessHistorySerializer(history, many=True)
         result = True
         data = history_se.data
