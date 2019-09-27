@@ -1,5 +1,5 @@
 
-base_url="http://10.11.30.52:8000";
+base_url="http://192.168.221.151:8000";
 
 // base_url="http://192.168.188.171:8000";
 
@@ -67,8 +67,6 @@ $(function () {
                     csrfmiddlewaretoken:csrftoken,
                 },
                 success:function (res) {
-                        console.log(res);
-
                         if(res.result==false){
                             $("#error").text(res.error);
                         }else {
@@ -79,6 +77,7 @@ $(function () {
                               localStorage.setItem("department",res.data.department);
                               localStorage.setItem("token",res.data.token);
                               localStorage.setItem("role",res.data.role);
+                              localStorage.setItem("face_picture",res.data.face_picture);
                               location.href="/phoned/";
                         }
 

@@ -141,7 +141,7 @@ def mqtt_run():
     mqttthread = Thread(target=mqttfunction)
     mqttthread.start()
 
-mqtt_run()
+# mqtt_run()
 # if __name__ == "__main__":
 #     mqtt_run()
 #     time.sleep(10)

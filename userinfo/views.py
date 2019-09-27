@@ -133,7 +133,7 @@ class StaffGuestLogin(APIView):
             data['role_name'] = real_name
             data['position'] = position
             data['department'] = department
-            data['face_picture'] = "http://" + "10.11.30.52:8000" + "/media" + str(face_picture)
+            data['face_picture'] = "http://" + "192.168.221.151:8000" + "/media" + str(face_picture)
             result = True
             data = data
             error = ""

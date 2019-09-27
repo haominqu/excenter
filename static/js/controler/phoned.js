@@ -1,6 +1,6 @@
 
 
-base_url="http://10.11.30.52:8000";
+base_url="http://192.168.221.151:8000";
 
 
 var login_url = base_url + "";
@@ -46,6 +46,7 @@ $(function () {
         var position = localStorage.getItem("position");
         var department = localStorage.getItem("department");
         var role = localStorage.getItem("role");
+        var face_picture = localStorage.getItem("face_picture");
         var socket = new WebSocket("ws:" + window.location.host + "/userinfo/" + "build_socket/" + userid);
         socket.onopen = function () {
             console.log('WebSocket open');//成功连接上Websocket
@@ -167,6 +168,7 @@ $(function () {
         // 基础信息
         $("span[name='realname']").text(username);
         $("span[name='position']").text(position);
+        $("span[name='face_picture']").attr("src","face_picture");
 
         // 显示用户信息
         //页面切换

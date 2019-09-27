@@ -1,5 +1,5 @@
 
-base_url="http://10.11.30.52:8000";
+base_url="http://192.168.221.151:8000";
 var invite_list_url = base_url + "/staff/guest/list/";
 var invite_add_url = base_url + "/staff/guest/manage/";
 var invite_image_url = base_url + "/staff/upload/image/";
