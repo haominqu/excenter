@@ -111,7 +111,7 @@ class UploadImage(APIView):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('8.8.8.8', 80))
         ip = s.getsockname()[0]
-        file_path = "http://" + "39.106.16.34:8001" + "/media/tempory_m/"+file_name
+        file_path = "http://" + "10.11.30.52:8000" + "/media/tempory_m/"+file_name
         im = Image.open(os.path.join(settings.BASE_DIR, 'media', 'tempory_m', file_name))
         if phonesys == "android":
             im_rotate = im.rotate(90)
@@ -233,5 +233,9 @@ class GuestList(APIView):
         # data = guest_info_list
         error = ""
         return JsonResponse({"result": result, "data": data, "error": error})
+
+
+
+
 
 

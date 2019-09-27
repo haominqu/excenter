@@ -36,8 +36,6 @@ allconn = defaultdict(list)
 def send_web_msg(user_id,msg):
     print(allconn)
     for i in allconn:
-        # if i != user_id:
-        print("$$$$",i)
         allconn[i].send(msg)
     return True
 
@@ -135,7 +133,7 @@ class StaffGuestLogin(APIView):
             data['role_name'] = real_name
             data['position'] = position
             data['department'] = department
-            data['face_picture'] = "http://" + "39.106.16.34:8001" + "/media" + str(face_picture)
+            data['face_picture'] = "http://" + "192.168.221.151:8000" + "/media" + str(face_picture)
             result = True
             data = data
             error = ""
@@ -245,14 +243,14 @@ class FaceInfoView(APIView):
         #     staff_info['user_id'] = staff.user.uu_id
         #     staff_info['real_name'] = staff.realname
         #     staff_info['welcome_msg'] = "欢迎" + staff.realname + "领导莅临参观指导!"
-        #     staff_info['face_picture'] = "http://" + "39.106.16.34:8001" + "/media" + str(staff.face_picture)
+        #     staff_info['face_picture'] = "http://" + "10.11.30.52:8000" + "/media" + str(staff.face_picture)
         #     data.append(staff_info)
         for guest in guests:
             guest_info = {}
             guest_info['user_id'] = guest.user.uu_id
             guest_info['real_name'] = guest.realname
             guest_info['welcome_msg'] = "欢迎" + guest.realname + "领导莅临参观指导!"
-            guest_info['face_picture'] = "http://" + "39.106.16.34:8001" + "/media" + str(guest.face_picture)
+            guest_info['face_picture'] = "http://" + "10.11.30.52:8000" + "/media" + str(guest.face_picture)
             data.append(guest_info)
         code = 1000
         data = data

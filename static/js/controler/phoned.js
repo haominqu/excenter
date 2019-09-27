@@ -1,8 +1,8 @@
 
-// base_url="http://192.168.188.239:8003";
-base_url="http://10.11.30.52:8000";
 
-// base_url="http://192.168.22.72:8000";
+
+base_url="http://192.168.22.72:8000";
+
 var login_url = base_url + "";
 var lamp_url = base_url + "";
 var curtain_url = base_url + "";
@@ -18,6 +18,25 @@ var token = localStorage.getItem("token");
 
 
 
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+
 
 $(function () {
 
@@ -27,6 +46,7 @@ $(function () {
         var position = localStorage.getItem("position");
         var department = localStorage.getItem("department");
         var role = localStorage.getItem("role");
+        var face_picture = localStorage.getItem("face_picture");
         var socket = new WebSocket("ws:" + window.location.host + "/userinfo/" + "build_socket/" + userid);
         socket.onopen = function () {
             console.log('WebSocket open');//成功连接上Websocket
@@ -97,12 +117,12 @@ $(function () {
 
                     if(bdata.mac_st==1){
 
-                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/aropen.png");
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/afopen.png");
                        $("input[_mid='"+bdata.mac_id+"']").val("关");
                        $("input[_mid='"+bdata.mac_id+"']").attr("checked",true);
                        $("input[_mid='"+bdata.mac_id+"']").attr('onclick','ctr_af_mac(0,'+bdata.mac_id+')');
                     }else {
-                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/arclose.png");
+                       $("div[_mid='"+bdata.mac_id+"'] img").attr("src","../static/images/icon/afclose.png");
 
                        $("input[_mid='"+bdata.mac_id+"']").val("开");
                        $("input[_mid='"+bdata.mac_id+"']").attr("checked",false);
@@ -148,6 +168,7 @@ $(function () {
         // 基础信息
         $("span[name='realname']").text(username);
         $("span[name='position']").text(position);
+        $("span[name='face_picture']").attr("src","face_picture");
 
         // 显示用户信息
         //页面切换
@@ -235,9 +256,9 @@ $(function () {
                         }
                     }else if(data[index].mac.mac_type=="Af"){
                         if(data[index].mac_status==0){
-                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/arclose.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/afclose.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(1,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }else {
-                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/aropen.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
+                            showit2= "<div _mid=\""+data[index].mac.id+"\"><img src=\"../static/images/icon/afopen.png\"></div><div class=\"switch\"><input type=\"checkbox\" onclick=\"ctr_af_mac(0,"+data[index].mac.id+")\" _mid=\""+data[index].mac.id+"\" class=\"control\" checked=\"true\"><label for=\"control\" class=\"checkbox\"></label></div></div>";
                         }
                     }
 
@@ -301,6 +322,7 @@ $(function () {
                     headers:{'Authorization':'hm JWT '+token},
                     data:{
                         mac_mode:2,
+                        csrfmiddlewaretoken:csrftoken,
                     },
                     success:function (res){
                         $("#atmt").text("手动");
@@ -319,6 +341,7 @@ $(function () {
                     headers:{'Authorization':'hm JWT '+token},
                     data:{
                         mac_mode:1,
+                        csrfmiddlewaretoken:csrftoken,
                     },
                     success:function (res){
                         $("#atmt").text("自动");

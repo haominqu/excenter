@@ -38,6 +38,7 @@ MAC_KIND = (
     (4, '光照'),
     (5, 'CO2'),
     (6, '电力'),
+    (7, 'PM2.5'),
 )
 # Create your models here.
 
