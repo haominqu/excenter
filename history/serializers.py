@@ -39,9 +39,10 @@ class AccessHistorySerializer(serializers.ModelSerializer):
 
     def user_field(self, obj):
         user_id = obj.user.id
+        print(user_id)
         user = Guest.objects.filter(user_id=user_id)
+        print(user)
         return user[0].realname
-
     class Meta:
         model = AccessHistory
         fields = ('user', 'octime', 'detail')

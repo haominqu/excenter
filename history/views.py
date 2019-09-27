@@ -36,7 +36,6 @@ class InviteHistoryView(APIView):
     )
 
     @method_decorator(login_decorator)
-
     def get(self, request, *args, **kwargs):
         history = InviteHistory.objects.all()
         history_se = InviteHistorySerializer(history, many=True)
@@ -52,9 +51,9 @@ class AccessHistoryView(APIView):
     )
 
     @method_decorator(login_decorator)
-
     def get(self, request, *args, **kwargs):
         history = AccessHistory.objects.all()
+        print("#####", history)
         history_se = AccessHistorySerializer(history, many=True)
         result = True
         data = history_se.data

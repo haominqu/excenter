@@ -29,7 +29,6 @@ def login_decorator(func):
         else:
             kwargs['token'] = front_token
             return func(request, *args, **kwargs)
-
     return token_func
 
 
